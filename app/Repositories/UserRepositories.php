@@ -3,13 +3,11 @@
 namespace App\Repositories;
 use App\Models\User;
 use App\Traits\ImageTrait;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ForgetPassword;
 
 class UserRepositories 
 {
     use ImageTrait;
-    private $user;
+    public $user;
 
     public function __construct(User $user) {
         $this->user = $user;
@@ -18,12 +16,20 @@ class UserRepositories
     public function store($data)
     {
         $user = $this->user->create($data);
-        $this->saveImage($data['photo'], $user, "users");
+        if (!empty($data['photo'])) {
+            $link = $this->uploadImage($data['photo'], "users");
+            $this->saveImage($link);
+        }
     }
 
-    public function sendEmail($data)
+    public function saveImage($link)
     {
-        $user = $this->user->where('email', $data['email'])->first();
-        Mail::to($user)->send(new ForgetPassword());
+        $this->user->image()->create($link);
+    }
+
+    public function resetPassword($data)
+    {
+        auth()->user()->update(['password' => $data['password']]);
+        auth()->user()->tokens()->delete();
     }
 }

@@ -7,16 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
+
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $fillable = [
         'name',
         'email',
@@ -24,22 +23,32 @@ class User extends Authenticatable
         'phone'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+
     protected $hidden = [
         'password',
     ];
 
-    public function images()
+    public function image()
     {
-        return $this->morphMany(Image::class, 'imagable');
+        return $this->morphOne(Image::class, 'imagable');
     }
 
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function findForPassport($username) // for user model 
+    {
+        return $this->where('email', $username)
+            ->orWhere('phone', $username)->first();
+    }
+
+    public function validateForPassportPasswordGrant($password)
+    {
+        if ($password == $this->password) {
+            return true;
+        }
+        return Hash::check($password, $this->password);
     }
 }

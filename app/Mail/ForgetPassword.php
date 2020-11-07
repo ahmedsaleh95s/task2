@@ -7,18 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ForgetPassword extends Mailable
+
+class ForgetPassword extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public $link;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($link)
     {
         //
+        $this->link = $link;
     }
 
     /**
@@ -28,6 +31,6 @@ class ForgetPassword extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.users.forgetPassword');
+        return $this->markdown('emails.users.forgetPassword', ["link" => $this->link]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Traits\HasAuthentication;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Hash;
 
 class AuthRepository
 {
@@ -18,21 +19,22 @@ class AuthRepository
 
     public function login($data, $auth)
     {
-        $data = $this->checkLoginType($data);
+        if (!$user = $this->checkUser($data)) {
+            return abort(response()->json(["error" => ["invalid credentials"]]));
+        }
         $token = $this->tokenRequest($auth, $data);
         if ($token['statusCode'] == Response::HTTP_OK) {
-            $result['user'] = $this->user->where('email', $data['email'])->first();
+            $result['user'] = $user;
             $result['token'] = $token['response'];
             return $result;
         }
-        return response()->json(["error" => ["invalid credentials"]]);
     }
 
-    public function checkLoginType($data)
+    public function checkUser($data)
     {
-        if (empty($data['email'])) {
-            $data['email'] = $this->user->where('phone', $data['phone'])->first()->email;
+        $user = $this->user->findForPassport($data['email']);
+        if ($user && Hash::check($data['password'], $user->password)) {
+            return $user;
         }
-        return $data;
     }
 }

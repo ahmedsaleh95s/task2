@@ -41,6 +41,11 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'firebase-dynamic-link' => 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks',
+    'firebase-key' => env('firebase_key'),
+    'dynamic-link-prefix' => env('dynamic_link'),
+    'dynamic-link-ios-android-config' => env('dynamic_link_platform_config'),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -53,6 +58,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+
+    'port' => env('port'),
 
     'asset_url' => env('ASSET_URL', null),
 

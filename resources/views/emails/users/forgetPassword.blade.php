@@ -1,10 +1,10 @@
 @component('mail::message')
 # Introduction
 
-The body of your message.
+Reset Password.
 
-@component('mail::button', ['url' => ''])
-Button Text
+@component('mail::button', ['url' => $link])
+{{ $link }}
 @endcomponent
 
 Thanks,<br>
