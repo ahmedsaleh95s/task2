@@ -15,9 +15,9 @@ class UserRepositories
 
     public function store($data)
     {
-        $user = $this->user->create($data);
+        $this->user = $this->user->create($data);
         if (!empty($data['photo'])) {
-            $link = $this->uploadImage($data['photo'], "users");
+            $link['image'] = $this->uploadImage($data['photo'], "users");
             $this->saveImage($link);
         }
     }
