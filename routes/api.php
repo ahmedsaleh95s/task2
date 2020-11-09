@@ -9,11 +9,8 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('admin/login', 'AuthController@adminLogin');
     Route::post('users', 'AuthController@register');
     Route::post('forget-password', 'AuthController@forgetPassword');
+    Route::post('reset-password', 'AuthController@resetPassword');
 
-    Route::middleware('auth:api')->group(function ()
-    {
-        Route::post('reset-password', 'AuthController@resetPassword');
-    });
 
     Route::middleware('auth:admin')->group(function ()
     {
