@@ -40,7 +40,7 @@ class UserRepositories
 
     public function getBy($column, $value)
     {
-        return $this->user->where('email', $value)->first();
+        return $this->user->where($column, $value)->first();
     }
 
     public function saveRememberToken($user)
