@@ -27,6 +27,7 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
+        'remember_token'
     ];
 
     public function image()
@@ -43,13 +44,5 @@ class User extends Authenticatable
     {
         return $this->where('email', $username)
             ->orWhere('phone', $username)->first();
-    }
-
-    public function validateForPassportPasswordGrant($password)
-    {
-        if ($password == $this->password) {
-            return true;
-        }
-        return Hash::check($password, $this->password);
     }
 }
