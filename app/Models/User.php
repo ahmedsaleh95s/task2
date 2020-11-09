@@ -20,7 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone'
+        'phone',
+        'remember_token'
     ];
 
 
@@ -38,7 +39,7 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
-    public function findForPassport($username) // for user model 
+    public function findForPassport($username)
     {
         return $this->where('email', $username)
             ->orWhere('phone', $username)->first();

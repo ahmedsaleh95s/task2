@@ -8,30 +8,39 @@ use App\Mail\ForgetPassword;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 use App\Traits\HasAuthentication;
+use Kreait\Firebase\DynamicLinks;
+use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
+use App\Traits\ImageTrait;
 
 class UserService
 {
 
     use HasAuthentication;
+    use ImageTrait;
     private $userRepo;
 
-    public function __construct(UserRepositories $userRepo)
+    public function __construct(UserRepositories $userRepo, DynamicLinks $dynamicLinks)
     {
         $this->userRepo = $userRepo;
+        $this->dynamicLinks = $dynamicLinks;
     }
 
 
     public function store($data)
     {
         $this->userRepo->store($data);
+        if (!empty($data['photo'])) {
+            $link['image'] = $this->uploadImage($data['photo'], "users");
+            $this->userRepo->saveImage($link);
+        }
     }
 
     public function forgetPassword($data, $auth)
     {
-        $user = $this->userRepo->user->where('email', $data['email'])->first();
+        $user = $this->userRepo->getBy('email', $data['email']);
         if ($user) {
-            $data['password'] = $user->password;
-            $link = $this->getDynamicLink($data, $auth);
+            $token = $this->userRepo->saveRememberToken($user);
+            $link = $this->getDynamicLink($token);
             Mail::to($user)->send(new ForgetPassword($link['shortLink']));
         }
     }
@@ -41,17 +50,14 @@ class UserService
         $this->userRepo->resetPassword($data);
     }
 
-    public function getDynamicLink($data, $auth)
+    public function getDynamicLink($token)
     {
-        $result = $this->tokenRequest($auth, $data);
-        $token = (json_decode($result['response'], true)['access_token']);
-        $response = Http::post( config('app.firebase-dynamic-link') .'?key=' . config('app.firebase-key'), [
-            'longDynamicLink' => config('app.dynamic-link-prefix') ."?link=". config('app.url'). ":" . config('app.port')."?token=". $token . config('app.dynamic-link-ios-android-config'),
-        ]);
-
-        if ($response->status() == Response::HTTP_OK) {
-            return json_decode($response->body(), true);
+        $url = config('app.url') . ":" . config('app.port') . "?token=" . $token;
+        try {
+            $link = $this->dynamicLinks->createShortLink($url);
+        } catch (FailedToCreateDynamicLink $e) {
+            echo $e->getMessage();
+            exit;
         }
-        return abort(response()->json(["error" => ["Failed To Generate Code"]]));
     }
 }

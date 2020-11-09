@@ -7,20 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
-class Image extends Model
+class File extends Model
 {
     use HasFactory, SoftDeletes;
     
     protected $fillable = [
-        'image', 'imagable_type', 'imagable_id'
+        'file', 'filable_type', 'filable_id'
     ];
 
-    public function imagable()
+    public function filable()
     {
         return $this->morphTo();
     }
 
-    public function getImageAttribute($value)
+    public function getFileAttribute($value)
     {
         return Storage::url($value);
     }

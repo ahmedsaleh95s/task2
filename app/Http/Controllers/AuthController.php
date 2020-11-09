@@ -11,15 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Resources\TokenResource;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Resources\AdminResource;
+use App\Services\AdminAuthService;
+use App\Services\UserAuthService;
 
 class AuthController extends Controller
 {
     //
-    private $authService, $userService;
+    private $userAuthService, $userService, $adminAuthService;
 
-    public function __construct( UserService $userService, AuthService $authService) {
-        $this->authService = $authService;
+    public function __construct( UserService $userService, UserAuthService $userAuthService, AdminAuthService $adminAuthService) {
+        $this->userAuthService = $userAuthService;
         $this->userService = $userService;
+        $this->adminAuthService = $adminAuthService;
     }
 
     public function register(CreateUserRequest $request)
@@ -31,7 +35,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request, ServerRequestInterface $auth)
     {
-        $response = $this->authService->login($request->all(), $auth);
+        $response = $this->userAuthService->login($request->all(), $auth);
         return [new UserResource($response['user']), new TokenResource(json_decode($response['token']))];
     }
 
@@ -45,5 +49,11 @@ class AuthController extends Controller
     {
         $this->userService->resetPassword($request->all());
         return response()->json(["message" => "success"]);
+    }
+
+    public function adminLogin(LoginRequest $request, ServerRequestInterface $auth)
+    {
+        $response = $this->adminAuthService->login($request->all(), $auth);
+        return [new AdminResource($response['user']), new TokenResource(json_decode($response['token']))];
     }
 }
