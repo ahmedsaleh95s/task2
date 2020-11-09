@@ -3,13 +3,12 @@
 namespace App\Services;
 
 use App\Repositories\ServiceProviderRepositories;
-use App\Traits\ImageTrait;
 use App\Traits\FileTrait;
 
 class ServiceProviderService
 {
 
-    use ImageTrait, FileTrait;
+    use FileTrait;
     private $serviceProviderRepo;
 
     public function __construct(ServiceProviderRepositories $serviceProviderRepo)
@@ -27,7 +26,7 @@ class ServiceProviderService
     public function uploadAvatar($image)
     {
         if (!empty($image)) {
-            $link = $this->uploadImage($image, "serviceProviders");
+            $link = $this->uploadFile($image, "serviceProviders");
             $this->saveAvatar($link);
         }
     }

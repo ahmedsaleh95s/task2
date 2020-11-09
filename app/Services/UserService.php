@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Traits\HasAuthentication;
 use Kreait\Firebase\DynamicLinks;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
-use App\Traits\ImageTrait;
+use App\Traits\FileTrait;
 
 class UserService
 {
 
     use HasAuthentication;
-    use ImageTrait;
+    use FileTrait;
     private $userRepo, $dynamicLinks;
 
     public function __construct(UserRepositories $userRepo, DynamicLinks $dynamicLinks)
@@ -30,7 +30,7 @@ class UserService
     {
         $this->userRepo->store($data);
         if (!empty($data['photo'])) {
-            $link['image'] = $this->uploadImage($data['photo'], "users");
+            $link['image'] = $this->uploadFile($data['photo'], "users");
             $this->userRepo->saveImage($link);
         }
     }
