@@ -17,7 +17,7 @@ class UserService
 
     use HasAuthentication;
     use ImageTrait;
-    private $userRepo;
+    private $userRepo, $dynamicLinks;
 
     public function __construct(UserRepositories $userRepo, DynamicLinks $dynamicLinks)
     {
@@ -53,11 +53,7 @@ class UserService
     public function getDynamicLink($token)
     {
         $url = config('app.url') . ":" . config('app.port') . "?token=" . $token;
-        try {
-            $link = $this->dynamicLinks->createShortLink($url);
-        } catch (FailedToCreateDynamicLink $e) {
-            echo $e->getMessage();
-            exit;
-        }
+        $link = json_encode($this->dynamicLinks->createShortLink($url));
+        return json_decode($link, true);
     }
 }

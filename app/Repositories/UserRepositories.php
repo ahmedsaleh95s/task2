@@ -26,11 +26,11 @@ class UserRepositories
     {
         $user = $this->user->where('email', $data['email'])
         ->where('remember_token', $data['token'])->first();
-        if ($user) {
-            $user->update(['password' => $data['password'], 'remember_token' => null]);
-            $user->tokens()->delete();
+        if (!$user) {
+            return abort(response()->json(["error" => ["invalid credentials"]]));
         }
-        return abort(response()->json(["error" => ["invalid credentials"]]));
+        $user->update(['password' => $data['password'], 'remember_token' => null]);
+        $user->tokens()->delete();
     }
 
     public function findForPassport($username)
