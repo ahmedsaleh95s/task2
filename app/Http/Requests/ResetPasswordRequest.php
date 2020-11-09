@@ -25,7 +25,9 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             //
-            "password" => 'required|min:8'
+            "password" => 'required|min:8',
+            'email' => 'required|email:rfc,dns',
+            'token' => 'required'
         ];
     }
 }

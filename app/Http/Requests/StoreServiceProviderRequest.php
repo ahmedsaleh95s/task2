@@ -28,7 +28,7 @@ class StoreServiceProviderRequest extends FormRequest
             'name_ar' => 'required',
             'name_en' => 'required',
             'phone' => ['required', 'regex:/^(0|\+)?(966|5|)(\d{9})$/'],
-            'email' => 'required|email|unique:service_providers',
+            'email' => 'required|email:rfc,dns|unique:service_providers',
             'lat' => 'required',
             'long' => 'required',
             'avatar' => 'required|image|mimes:jpeg,bmp,png',

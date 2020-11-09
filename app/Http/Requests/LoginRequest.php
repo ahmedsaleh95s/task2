@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
-        $rule = (is_numeric($this->email)) ? 'regex:/^(0|\+)?(966|5|)(\d{9})$/' : 'email:rfc';
+        $rule = (is_numeric($this->email)) ? 'regex:/^(0|\+)?(966|5|)(\d{9})$/' : 'email:rfc,dns';
         return [
             //
             "email" => ['required',  $rule],

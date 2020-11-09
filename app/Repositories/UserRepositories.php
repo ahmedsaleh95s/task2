@@ -28,7 +28,7 @@ class UserRepositories
         ->where('remember_token', $data['token'])->first();
         if ($user) {
             $user->update(['password' => $data['password'], 'remember_token' => null]);
-            $user->tokens()->revoke();
+            $user->tokens()->delete();
         }
         return abort(response()->json(["error" => ["invalid credentials"]]));
     }
