@@ -16,6 +16,6 @@ class UserAuthService{
 
     public function login($data, $auth) // login in service
     {
-        return $this->authService->login($data, $auth, null, $this->userRepo);
+        return $this->authService->login($data, $auth, "users");
     }
 }

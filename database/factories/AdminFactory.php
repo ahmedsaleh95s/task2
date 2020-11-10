@@ -23,8 +23,8 @@ class AdminFactory extends Factory
     {
         return [
             //
-            'email' => $this->faker->unique()->safeEmail,
-            'password' => '$2y$10$ZsDpAaKbe4vxkSENKelmUOIS.lqVniVSsv6LSZq2DWch2mxfr0Xw2', // 12345678
+            'email' => $this->faker->unique()->freeEmail,
+            'password' => '12345678'
         ];
     }
 }

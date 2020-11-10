@@ -19,7 +19,7 @@ class AuthService{
     public function login($data, $auth, $provider) // login in service
     {
         if (!$user = $this->checkUser($data)) {
-            return abort(response()->json(["error" => ["invalid credentials"]]));
+            return abort(response()->json(["error" => ["invalid credentials"]], Response::HTTP_UNAUTHORIZED));
         }
         $token = $this->tokenRequest($auth, $data, $provider);
         if ($token['statusCode'] == Response::HTTP_OK) {
