@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreServiceProviderRequest extends FormRequest
+class UpdateServiceProviderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +29,7 @@ class StoreServiceProviderRequest extends FormRequest
             'name_ar' => 'required|min:3|max:150',
             'name_en' => 'required|min:3|max:150',
             'phone' => ['required', 'regex:/^(0|\+)?(966|5|)(\d{9})$/'],
-            'email' => 'required|email:rfc,dns|unique:service_providers',
+            'email' => ['required','email:rfc,dns',Rule::unique('service_providers')->ignore($this->id)],
             'lat' => ['required','regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'], 
             'long' => ['required','regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
             'avatar' => 'required|image|mimes:jpeg,bmp,png',

@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Repositories;
+
+use App\Interfaces\AuthInterface;
 use App\Models\Admin;
 
-class AdminRepositories 
+class AdminRepositories implements AuthInterface
 {
     public $admin;
 
@@ -15,4 +17,6 @@ class AdminRepositories
     {
         return $this->admin->where('email', $username)->first();
     }
+
+    
 }

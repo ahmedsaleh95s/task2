@@ -2,38 +2,33 @@
 
 namespace App\Services;
 
+use App\Interfaces\AuthInterface;
 use App\Traits\HasAuthentication;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\AdminRepositories;
+use Exception;
 
-class AuthService{
+use function PHPUnit\Framework\throwException;
+
+class AuthService
+{
 
     use HasAuthentication;
 
-    private $authRepo;
+    private $authInterface;
     
-    public function __construct($authRepo) {
-        $this->authRepo = $authRepo;
+    public function __construct(AuthInterface $authInterface) {
+        $this->authInterface = $authInterface;
     }
 
     public function login($data, $auth, $provider) // login in service
     {
-        if (!$user = $this->checkUser($data)) {
-            return abort(response()->json(["error" => ["invalid credentials"]], Response::HTTP_UNAUTHORIZED));
-        }
         $token = $this->tokenRequest($auth, $data, $provider);
         if ($token['statusCode'] == Response::HTTP_OK) {
-            $result['user'] = $user;
+            $result['user'] = $this->authInterface->findForPassport($data['email']);
             $result['token'] = $token['response'];
             return $result;
-        }
-    }
-
-    public function checkUser($data)
-    {
-        $user = $this->authRepo->findForPassport($data['email']);
-        if ($user && Hash::check($data['password'], $user->password)) {
-            return $user;
         }
     }
 }

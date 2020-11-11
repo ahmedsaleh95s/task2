@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Repositories;
+
+use App\Interfaces\AuthInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
 
-class UserRepositories 
+class UserRepositories implements AuthInterface
 {
     public $user;
 

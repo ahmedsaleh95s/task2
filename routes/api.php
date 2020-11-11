@@ -5,16 +5,21 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::namespace('App\Http\Controllers')->group(function () {
-    Route::post('login', 'AuthController@login')->name('loginUser');
-    Route::post('admin/login', 'AuthController@adminLogin')->name('adminLogin');
-    Route::post('users', 'AuthController@register')->name('RegisterUser');
-    Route::post('forget-password', 'AuthController@forgetPassword')->name('forgetPassword');
-    Route::post('reset-password', 'AuthController@resetPassword')->name('resetPassword');
+    Route::post('login', 'AuthController@login')->name('login-user');
+    Route::post('admin/login', 'AdminController@login')->name('admin-login');
+    Route::post('users', 'AuthController@register')->name('register-user');
+    Route::post('forget-password', 'AuthController@forgetPassword')->name('forget-password');
+    Route::post('reset-password', 'AuthController@resetPassword')->name('reset-password');
 
 
     Route::middleware('auth:admin')->group(function ()
     {
-        Route::post('service-providers', 'ServiceProviderController@store')->name('storeServiceProvider');
+        Route::prefix('service-providers')->group(function (){
+            Route::post('/', 'ServiceProviderController@store')->name('store-service-provider');
+            Route::get('/', 'ServiceProviderController@all')->name('all-service-provider');
+            Route::get('/{id}', 'ServiceProviderController@show')->name('show-service-provider');
+            Route::post('/{id}', 'ServiceProviderController@update')->name('update-service-provider'); 
+        });
     });
 
 });

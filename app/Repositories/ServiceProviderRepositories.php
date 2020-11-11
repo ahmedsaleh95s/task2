@@ -18,11 +18,10 @@ class ServiceProviderRepositories
 
     public function store($data)
     {
+        $data = $this->handlePlaces($data);
         $this->serviceProvider = $this->serviceProvider->create($data);
         $this->serviceProvider->categories()->attach($data['Categories']);
         $this->serviceProvider->workingHours()->createMany($data['working_hours']);
-        $points = $this->handlePlaces($data);
-        $this->serviceProvider->places()->create($points);
     }
 
     public function saveAvatar($link)
@@ -37,11 +36,31 @@ class ServiceProviderRepositories
 
     public function handlePlaces($data)
     {
-        $place['location'] = new Point($data['lat'], $data['long']);
+        $data['location'] = new Point($data['lat'], $data['long']);
         foreach ($data['Area_polygon'] as $point) {
             $points[] = new Point($point[0], $point[1]);
         }
-        $place['area'] = new Polygon([new LineString($points)]);
-        return $place;
+        $data['area'] = new Polygon([new LineString($points)]);
+        return $data;
+    }
+
+    public function all()
+    {
+        return $this->serviceProvider->all();
+    }
+
+    public function show($id)
+    {
+        return $this->serviceProvider->find($id);
+    }
+
+    public function update($data, $id)
+    {
+        $serviceProvider = $this->show($id);
+        $data = $this->handlePlaces($data);
+        $serviceProvider->update($data);
+        $serviceProvider->categories()->sync($data['Categories']);
+        $serviceProvider->workingHours()->delete();
+        $serviceProvider->workingHours()->createMany($data['working_hours']);
     }
 }

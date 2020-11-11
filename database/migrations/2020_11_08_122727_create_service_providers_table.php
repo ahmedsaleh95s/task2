@@ -19,6 +19,8 @@ class CreateServiceProvidersTable extends Migration
             $table->string('name_en');
             $table->string('phone')->unique();
             $table->string('email')->unique();
+            $table->point('location')->nullable();
+            $table->polygon('area')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

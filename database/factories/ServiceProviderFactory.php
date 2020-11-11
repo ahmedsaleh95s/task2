@@ -21,6 +21,8 @@ class ServiceProviderFactory extends Factory
      */
     public function definition()
     {
+        $lat = $this->faker->latitude;
+        $long = $this->faker->longitude;
         return [
             //
             'name_ar' => $this->faker->name,
@@ -31,11 +33,11 @@ class ServiceProviderFactory extends Factory
             'long' => $this->faker->longitude,
             'Categories' => [1, 2, 3],
             'Area_polygon' => [
+                [$lat, $long],
                 [$this->faker->latitude, $this->faker->longitude],
                 [$this->faker->latitude, $this->faker->longitude],
                 [$this->faker->latitude, $this->faker->longitude],
-                [$this->faker->latitude, $this->faker->longitude],
-                [$this->faker->latitude, $this->faker->longitude],
+                [$lat, $long],
             ],
             'working_hours' => [
                 [

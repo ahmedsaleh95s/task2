@@ -5,13 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class ServiceProvider extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, SpatialTrait;
 
     protected $fillable = [
-        'name_ar','name_en','phone','email'
+        'name_ar','name_en','phone','email','area','location'
+    ];
+
+    protected $spatialFields = [
+        'location','area'
     ];
 
     public function image()
@@ -27,11 +32,6 @@ class ServiceProvider extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
-    }
-
-    public function places()
-    {
-        return $this->hasMany(Place::class);
     }
 
     public function workingHours()

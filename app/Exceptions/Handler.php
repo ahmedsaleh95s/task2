@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use App\Exceptions\CustomException;
+use Exception;
 
 class Handler extends ExceptionHandler
 {

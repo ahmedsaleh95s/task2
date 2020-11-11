@@ -31,9 +31,17 @@ class UserTest extends TestCase
     /** @test */
     public function store_user_successfully()
     {
-        $response = $this->json('POST', route('RegisterUser'), $this->data);
+        $response = $this->json('POST', route('register-user'), $this->data);
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertSee("message");
+    }
+
+    /** @test */
+    public function fail_to_store_user_successfully()
+    {
+        $this->data['email'] = $this->user->email;
+        $response = $this->json('POST', route('register-user'), $this->data);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
@@ -41,7 +49,7 @@ class UserTest extends TestCase
     {
         $data['email'] = $this->user->email;
         $data['password'] = '12345678';
-        $response = $this->json('POST', route('loginUser'), $data);
+        $response = $this->json('POST', route('login-user'), $data);
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -50,7 +58,7 @@ class UserTest extends TestCase
     {
         $data['email'] = $this->user->phone;
         $data['password'] = '12345678';
-        $response = $this->json('POST', route('loginUser'), $data);
+        $response = $this->json('POST', route('login-user'), $data);
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -58,7 +66,7 @@ class UserTest extends TestCase
     public function send_dynamic_link_for_user_successfully()
     {
         $data['email'] = $this->user->email;
-        $response = $this->json('POST', route('forgetPassword'), $data);
+        $response = $this->json('POST', route('forget-password'), $data);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertSee("message");
     }
@@ -69,7 +77,7 @@ class UserTest extends TestCase
         $data['email'] = $this->user->email;
         $data['password'] = '12345678';
         $data['token'] = $this->user->remember_token;
-        $response = $this->json('POST', route('resetPassword'), $data);
+        $response = $this->json('POST', route('reset-password'), $data);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertSee("message");
     }

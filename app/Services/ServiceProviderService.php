@@ -50,5 +50,20 @@ class ServiceProviderService
     {
         $this->serviceProviderRepo->saveFiles($file);
     }
+
+    public function all()
+    {
+        return $this->serviceProviderRepo->all();
+    }
+
+    public function show($id)
+    {
+        return $this->serviceProviderRepo->show($id);
+    }
+
+    public function update($data, $id)
+    {
+        $this->serviceProviderRepo->update($data, $id);
+    }
     
 }
