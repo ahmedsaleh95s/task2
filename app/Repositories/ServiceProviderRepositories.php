@@ -2,12 +2,13 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\AuthInterface;
 use App\Models\ServiceProvider;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Grimzy\LaravelMysqlSpatial\Types\Polygon;
 use Grimzy\LaravelMysqlSpatial\Types\LineString;
 
-class ServiceProviderRepositories
+class ServiceProviderRepositories implements AuthInterface
 {
     public $serviceProvider;
 
@@ -62,5 +63,23 @@ class ServiceProviderRepositories
         $serviceProvider->categories()->sync($data['Categories']);
         $serviceProvider->workingHours()->delete();
         $serviceProvider->workingHours()->createMany($data['working_hours']);
+    }
+
+    public function delete($id)
+    {
+        $serviceProvider = $this->show($id);
+        $serviceProvider->categories()->delete();
+        $serviceProvider->workingHours()->delete();
+        $serviceProvider->delete();
+    }
+
+    public function findForPassport($username)
+    {
+        return $this->serviceProvider->where('email', $username)->first();
+    }
+
+    public function setProvider()
+    {
+        return "service-providers";
     }
 }

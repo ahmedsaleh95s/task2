@@ -18,5 +18,8 @@ class AdminRepositories implements AuthInterface
         return $this->admin->where('email', $username)->first();
     }
 
-    
+    public function setProvider()
+    {
+        return "admins";
+    }
 }

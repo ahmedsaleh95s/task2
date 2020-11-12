@@ -65,5 +65,10 @@ class ServiceProviderService
     {
         $this->serviceProviderRepo->update($data, $id);
     }
+
+    public function delete($id)
+    {
+        $this->serviceProviderRepo->delete($id);
+    }
     
 }

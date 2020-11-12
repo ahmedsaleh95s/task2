@@ -51,6 +51,11 @@ return [
             'provider' => 'admins',
             'hash' => false,
         ],
+        'service-provider' => [
+            'driver' => 'passport',
+            'provider' => 'service_providers',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -78,6 +83,10 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+        'service-providers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\ServiceProvider::class,
         ],
 
         // 'users' => [

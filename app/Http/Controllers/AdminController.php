@@ -21,7 +21,7 @@ class AdminController extends Controller
 
     public function login(AdminLoginRequest $request, ServerRequestInterface $auth)
     {
-        $response = $this->authService->login($request->all(), $auth, "admins");
+        $response = $this->authService->login($request->all(), $auth);
         return [new AdminResource($response['user']), new TokenResource(json_decode($response['token']))];
     }
 }

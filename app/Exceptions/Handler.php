@@ -3,9 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use League\OAuth2\Server\Exception\OAuthServerException;
+use Laravel\Passport\Exceptions\OAuthServerException;
 use App\Exceptions\CustomException;
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -36,5 +37,8 @@ class Handler extends ExceptionHandler
     public function register()
     {
         //
+        $this->reportable(function (OAuthServerException $exception) {
+            return abort(response()->json(["error" => 'Unauthorized'], 401));
+        });
     }
 }

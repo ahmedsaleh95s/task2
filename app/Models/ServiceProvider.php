@@ -6,18 +6,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class ServiceProvider extends Model
+class ServiceProvider extends Authenticatable
 {
-    use HasFactory, SoftDeletes, SpatialTrait;
+    use HasFactory, SoftDeletes, SpatialTrait, HasApiTokens;
 
     protected $fillable = [
-        'name_ar','name_en','phone','email','area','location'
+        'name_ar','name_en','phone','email','area','location','password'
     ];
 
     protected $spatialFields = [
         'location','area'
     ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 
     public function image()
     {

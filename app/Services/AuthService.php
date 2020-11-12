@@ -22,9 +22,9 @@ class AuthService
         $this->authInterface = $authInterface;
     }
 
-    public function login($data, $auth, $provider) // login in service
+    public function login($data, $auth) // login in service
     {
-        $token = $this->tokenRequest($auth, $data, $provider);
+        $token = $this->tokenRequest($auth, $data, $this->authInterface->setProvider());
         if ($token['statusCode'] == Response::HTTP_OK) {
             $result['user'] = $this->authInterface->findForPassport($data['email']);
             $result['token'] = $token['response'];

@@ -51,4 +51,9 @@ class UserRepositories implements AuthInterface
         $user->update(['remember_token' => $token]);
         return $token;
     }
+
+    public function setProvider()
+    {
+        return "users";
+    }
 }
