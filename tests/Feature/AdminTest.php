@@ -37,6 +37,6 @@ class AdminTest extends TestCase
         $data['email'] = Admin::first()->email;
         $data['password'] = '123456789';
         $response = $this->json('POST', route('admin-login'), $data);
-        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 }

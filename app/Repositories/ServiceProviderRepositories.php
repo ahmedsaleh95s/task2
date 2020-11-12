@@ -7,6 +7,7 @@ use App\Models\ServiceProvider;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Grimzy\LaravelMysqlSpatial\Types\Polygon;
 use Grimzy\LaravelMysqlSpatial\Types\LineString;
+use App\Enums\ProviderType;
 
 class ServiceProviderRepositories implements AuthInterface
 {
@@ -80,6 +81,6 @@ class ServiceProviderRepositories implements AuthInterface
 
     public function setProvider()
     {
-        return "service-providers";
+        return ProviderType::SERVICE_PROVIDER;
     }
 }

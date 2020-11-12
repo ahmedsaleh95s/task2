@@ -59,4 +59,20 @@ class ServiceProviderTest extends TestCase
         $response = $this->json('POST', route('update-service-provider', ['id' => 1]), $this->data);
         $response->assertStatus(Response::HTTP_OK);
     }
+
+    /** @test */
+    public function delete_Service_provider_data()
+    {
+        $response = $this->json('DELETE', route('delete-service-provider', ['id' => 3]));
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
+    public function login_Service_provider_successfully()
+    {
+        $data['email'] = ServiceProvider::first()->email;
+        $data['password'] = '123456789';
+        $response = $this->json('POST', route('service-provider-login'), $data);
+        $response->assertStatus(Response::HTTP_OK);
+    }
 }

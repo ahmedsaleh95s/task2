@@ -27,7 +27,7 @@ class ServiceProviderFactory extends Factory
             //
             'name_ar' => $this->faker->name,
             'name_en' => $this->faker->name,
-            'phone' => '9665'. $this->faker->randomNumber(5),
+            'phone' => '9665' . $this->faker->randomNumber(5),
             'email' => $this->faker->unique()->freeEmail,
             'lat' => $this->faker->latitude,
             'long' => $this->faker->longitude,
@@ -45,7 +45,8 @@ class ServiceProviderFactory extends Factory
                     'to' => '04:00 pm',
                     "day" => 1
                 ]
-            ]
+            ],
+            'password' => '12345678'
         ];
     }
 }

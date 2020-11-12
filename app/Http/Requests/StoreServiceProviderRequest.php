@@ -44,6 +44,7 @@ class StoreServiceProviderRequest extends FormRequest
             'working_hours.*.from' => 'required', // date_format:H:i a|p
             'working_hours.*.to' => ['required','after:working_hours.*.from'],
             'working_hours.*.day' => 'required|numeric|min:0|max:6',
+            'password' => 'required|min:8'
         ];
     }
 }

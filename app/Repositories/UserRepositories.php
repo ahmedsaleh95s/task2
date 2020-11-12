@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\ProviderType;
 use App\Interfaces\AuthInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -54,6 +55,6 @@ class UserRepositories implements AuthInterface
 
     public function setProvider()
     {
-        return "users";
+        return ProviderType::USER;
     }
 }

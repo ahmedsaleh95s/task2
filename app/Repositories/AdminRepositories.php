@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\ProviderType;
 use App\Interfaces\AuthInterface;
 use App\Models\Admin;
 
@@ -20,6 +21,6 @@ class AdminRepositories implements AuthInterface
 
     public function setProvider()
     {
-        return "admins";
+        return ProviderType::ADMIN;
     }
 }
