@@ -9,11 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
-
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
+    use HasFactory, Notifiable, SoftDeletes, HasApiTokens, SpatialTrait;
 
 
     protected $fillable = [
@@ -21,9 +21,13 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'remember_token'
+        'remember_token',
+        'location'
     ];
 
+    protected $spatialFields = [
+        'location'
+    ];
 
     protected $hidden = [
         'password',

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Rules;
+use Illuminate\Support\Arr;
 
 use Illuminate\Contracts\Validation\Rule;
 
@@ -23,17 +24,13 @@ class OverlapIntervals implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($key, $current)
     {
         //
-        for ($i=0; $i < count($value); $i++) {
-            for ($j=$i + 1; $j < count($value); $j++) { 
-                if ($value[$i]['to'] > $value[$j]['from'] && $value[$i]['day'] == $value[$j]['day']) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        $array = Arr::where(request()->input('working_hours'), function ($value, $index) use($key, $current){
+            return $value['day'] == $current['day'] && $value['to'] > $current['to'] && $current['to'] > $value['from'];
+        });
+        return (count($array) == 0) ? true : false ;
     }
 
     /**

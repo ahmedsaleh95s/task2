@@ -12,6 +12,12 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('forget-password', 'AuthController@forgetPassword')->name('forget-password');
     Route::post('reset-password', 'AuthController@resetPassword')->name('reset-password');
 
+    Route::middleware('auth:api')->group(function ()
+    {
+        Route::prefix('users')->group(function (){
+            Route::get('/service-provider/distance', 'AuthController@distance')->name('user-distance');
+        });
+    });
 
     Route::middleware('auth:admin')->group(function ()
     {

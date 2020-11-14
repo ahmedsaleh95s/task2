@@ -8,9 +8,11 @@ use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Grimzy\LaravelMysqlSpatial\Types\Polygon;
 use Grimzy\LaravelMysqlSpatial\Types\LineString;
 use App\Enums\ProviderType;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class ServiceProviderRepositories implements AuthInterface
 {
+    use SpatialTrait;
     public $serviceProvider;
 
     public function __construct(ServiceProvider $serviceProvider)
@@ -82,5 +84,10 @@ class ServiceProviderRepositories implements AuthInterface
     public function setProvider()
     {
         return ProviderType::SERVICE_PROVIDER;
+    }
+
+    public function distance($geometry)
+    {
+        return $this->serviceProvider->contains('area', $geometry)->get();
     }
 }

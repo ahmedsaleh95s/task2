@@ -24,6 +24,7 @@ class AuthService
 
     public function login($data, $auth) // login in service
     {
+        $this->authInterface->pro = $this->authInterface->setProvider();
         $token = $this->tokenRequest($auth, $data, $this->authInterface->setProvider());
         if ($token['statusCode'] == Response::HTTP_OK) {
             $result['user'] = $this->authInterface->findForPassport($data['email']);

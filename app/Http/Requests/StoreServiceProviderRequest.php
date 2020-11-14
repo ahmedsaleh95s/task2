@@ -40,9 +40,10 @@ class StoreServiceProviderRequest extends FormRequest
             'Area_polygon' => 'required|array',
             'Area_polygon.*.0' => ['required', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
             'Area_polygon.*.1' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-            'working_hours' => ['required','array', new OverlapIntervals],
-            'working_hours.*.from' => 'required', // date_format:H:i a|p
-            'working_hours.*.to' => ['required','after:working_hours.*.from'],
+            'working_hours' => ['required','array'], // new OverlapIntervals
+            'working_hours.*' => ['bail' , new OverlapIntervals],
+            'working_hours.*.from' => ['required', 'date_format:h:i A'], // 
+            'working_hours.*.to' => ['required','after:working_hours.*.from','date_format:h:i A'],
             'working_hours.*.day' => 'required|numeric|min:0|max:6',
             'password' => 'required|min:8'
         ];

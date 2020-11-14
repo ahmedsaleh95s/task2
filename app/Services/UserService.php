@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\UserRepositories;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgetPassword;
+use App\Repositories\ServiceProviderRepositories;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 use App\Traits\HasAuthentication;
@@ -17,12 +18,13 @@ class UserService
 
     use HasAuthentication;
     use FileTrait;
-    private $userRepo, $dynamicLinks;
+    private $userRepo, $dynamicLinks, $serviceProviderRepo;
 
-    public function __construct(UserRepositories $userRepo, DynamicLinks $dynamicLinks)
+    public function __construct(UserRepositories $userRepo, DynamicLinks $dynamicLinks, ServiceProviderRepositories $serviceProviderRepo)
     {
         $this->userRepo = $userRepo;
         $this->dynamicLinks = $dynamicLinks;
+        $this->serviceProviderRepo = $serviceProviderRepo;
     }
 
 
@@ -55,5 +57,10 @@ class UserService
         $url = config('app.url') . ":" . config('app.port') . "?token=" . $token;
         $link = json_encode($this->dynamicLinks->createShortLink($url));
         return json_decode($link, true);
+    }
+
+    public function distance($geometry)
+    {
+        return $this->serviceProviderRepo->distance($geometry);
     }
 }

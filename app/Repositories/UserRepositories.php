@@ -6,6 +6,7 @@ use App\Enums\ProviderType;
 use App\Interfaces\AuthInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 
 class UserRepositories implements AuthInterface
 {
@@ -17,6 +18,7 @@ class UserRepositories implements AuthInterface
 
     public function store($data)
     {
+        $data['location'] = new Point($data['lat'], $data['long']);
         $this->user = $this->user->create($data);
     }
 
