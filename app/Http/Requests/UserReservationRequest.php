@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserRequest extends FormRequest
+class UserReservationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,9 @@ class CreateUserRequest extends FormRequest
     {
         return [
             //
-            'name' => 'required|min:3|max:150',
-            'email' => 'required|email:rfc,dns|unique:users',
-            'phone' => ['required','unique:users','regex:/^(0|\+)?(966|5|)(\d{9})$/'],
-            'password' => 'required|min:8',
-            'photo' => 'required|image|mimes:jpeg,bmp,png',
+            'from' => ['required', 'date_format:h:i A'],
+            'to' => ['required','after:from','date_format:h:i A'],
+            'day' => 'required|numeric|min:0|max:6',
         ];
     }
 }

@@ -9,12 +9,15 @@ use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\ForgetPasswordRequest;
+use App\Http\Requests\GetServiceProviderRequest;
 use App\Http\Resources\TokenResource;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UserReservationRequest;
 use App\Http\Resources\ServiceProviderResource;
+use App\Models\ServiceProvider;
 use App\Services\ServiceProviderService;
 
-class AuthController extends Controller
+class UserController extends Controller
 {
     //
     private $authService, $userService, $serviceProviderService;
@@ -50,9 +53,16 @@ class AuthController extends Controller
         return response()->json(["message" => "success"]);
     }
 
-    public function distance()
+    public function distance(GetServiceProviderRequest $request)
     {
-        $serviceProviders = $this->userService->distance(auth()->user()->location);
+        $serviceProviders = $this->userService->distance($request->all());
         return ServiceProviderResource::collection($serviceProviders);
+    }
+
+    public function reservation(UserReservationRequest $request, ServiceProvider $serviceProvider)
+    {
+        $this->userService->reservation($request->all(), $serviceProvider);
+        return response()->json(["message" => "success"])
+        ->setStatusCode(Response::HTTP_CREATED);
     }
 }

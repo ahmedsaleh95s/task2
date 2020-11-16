@@ -14,7 +14,7 @@ class Admin extends Authenticatable
     use Notifiable, HasApiTokens, SoftDeletes, HasFactory;
 
     protected $fillable = [
-        'email', 'password',
+        'email', 'password', 'commission'
     ];
 
     protected $hidden = [

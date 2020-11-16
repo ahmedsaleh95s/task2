@@ -59,8 +59,13 @@ class UserService
         return json_decode($link, true);
     }
 
-    public function distance($geometry)
+    public function distance($data)
     {
-        return $this->serviceProviderRepo->distance($geometry);
+        return $this->serviceProviderRepo->distance($data);
+    }
+
+    public function reservation($data, $serviceProvider)
+    {
+        $this->userRepo->reservation($data, $serviceProvider);
     }
 }

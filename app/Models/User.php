@@ -9,11 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes, HasApiTokens, SpatialTrait;
+    use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
 
 
     protected $fillable = [
@@ -22,11 +21,6 @@ class User extends Authenticatable
         'password',
         'phone',
         'remember_token',
-        'location'
-    ];
-
-    protected $spatialFields = [
-        'location'
     ];
 
     protected $hidden = [
@@ -48,5 +42,10 @@ class User extends Authenticatable
     {
         return $this->where('email', $username)
             ->orWhere('phone', $username)->first();
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

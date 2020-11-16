@@ -28,8 +28,6 @@ class UserFactory extends Factory
             'password' => '12345678',
             'phone' => '9665'. $this->faker->randomNumber(5),
             'remember_token' => Str::random(60),
-            'lat' => $this->faker->latitude,
-            'long' => $this->faker->longitude,
         ];
     }
 }

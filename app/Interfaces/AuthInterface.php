@@ -4,6 +4,6 @@ namespace App\Interfaces;
 
 interface AuthInterface {
     
-    public function setProvider();
-    public function findForPassport($username);
+    public function getProvider();
+    public function getModel($username);
 }

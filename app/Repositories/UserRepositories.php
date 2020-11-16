@@ -6,7 +6,7 @@ use App\Enums\ProviderType;
 use App\Interfaces\AuthInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
+use App\Models\Admin;
 
 class UserRepositories implements AuthInterface
 {
@@ -18,7 +18,6 @@ class UserRepositories implements AuthInterface
 
     public function store($data)
     {
-        $data['location'] = new Point($data['lat'], $data['long']);
         $this->user = $this->user->create($data);
     }
 
@@ -38,7 +37,7 @@ class UserRepositories implements AuthInterface
         $user->tokens()->delete();
     }
 
-    public function findForPassport($username)
+    public function getModel($username)
     {
         return $this->user->findForPassport($username);
     }
@@ -55,8 +54,24 @@ class UserRepositories implements AuthInterface
         return $token;
     }
 
-    public function setProvider()
+    public function getProvider()
     {
         return ProviderType::USER;
+    }
+
+    public function reservation($data, $serviceProvider)
+    {
+        $workingHours = $serviceProvider->workingHours()
+        ->where('day', $data['day'])
+        ->where('from', '<=', $data['from'])
+        ->where('to', '>=', $data['to'])
+        ->first();
+        if ($workingHours) {
+            $data['working_hour_id'] = $workingHours->id;
+            $data['total'] = $workingHours->price - (100 / Admin::first()->commission);
+            auth()->user()->reservations()->create($data);
+        }else {
+            return abort(response()->json(["error" => ["no time avaiable"]]));
+        }
     }
 }

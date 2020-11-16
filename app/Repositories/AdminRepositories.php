@@ -14,13 +14,18 @@ class AdminRepositories implements AuthInterface
         $this->admin = $admin;
     }
 
-    public function findForPassport($username)
+    public function getModel($username)
     {
         return $this->admin->where('email', $username)->first();
     }
 
-    public function setProvider()
+    public function getProvider()
     {
         return ProviderType::ADMIN;
+    }
+
+    public function commission($data)
+    {
+        auth()->user()->update(['commission' => $data['commission']]);
     }
 }

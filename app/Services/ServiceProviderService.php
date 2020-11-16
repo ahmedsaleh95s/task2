@@ -61,14 +61,14 @@ class ServiceProviderService
         return $this->serviceProviderRepo->show($id);
     }
 
-    public function update($data, $id)
+    public function update($data, $serviceProvider)
     {
-        $this->serviceProviderRepo->update($data, $id);
+        $this->serviceProviderRepo->update($data, $serviceProvider);
     }
 
-    public function delete($id)
+    public function delete($serviceProvider)
     {
-        $this->serviceProviderRepo->delete($id);
+        $this->serviceProviderRepo->delete($serviceProvider);
     }
     
 }

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Http\Resources\TokenResource;
 use App\Services\AuthService;
+use App\Models\ServiceProvider;
 
 class ServiceProviderController extends Controller
 {
@@ -36,21 +37,20 @@ class ServiceProviderController extends Controller
         return ServiceProviderResource::collection($serviceProviders);
     }
 
-    public function show($id)
+    public function show(ServiceProvider $serviceProvider)
     {
-        $serviceProvider = $this->serviceProviderService->show($id);
         return new ServiceProviderResource($serviceProvider);
     }
 
-    public function update(UpdateServiceProviderRequest $request, $id)
+    public function update(UpdateServiceProviderRequest $request, ServiceProvider $serviceProvider)
     {
-        $this->serviceProviderService->update($request->all(), $id);
+        $this->serviceProviderService->update($request->all(), $serviceProvider);
         return response()->json(["message" => "success"]);
     }
 
-    public function delete($id)
+    public function delete(ServiceProvider $serviceProvider)
     {
-        $this->serviceProviderService->delete($id);
+        $this->serviceProviderService->delete($serviceProvider);
         return response()->json(["message" => "success"]);
     }
 

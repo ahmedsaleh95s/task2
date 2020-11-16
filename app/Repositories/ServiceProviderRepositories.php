@@ -58,36 +58,38 @@ class ServiceProviderRepositories implements AuthInterface
         return $this->serviceProvider->find($id);
     }
 
-    public function update($data, $id)
+    public function update($data, $serviceProvider)
     {
-        $serviceProvider = $this->show($id);
         $data = $this->handlePlaces($data);
         $serviceProvider->update($data);
         $serviceProvider->categories()->sync($data['Categories']);
-        $serviceProvider->workingHours()->delete();
+        $serviceProvider->workingHours()->delete(); // sync
         $serviceProvider->workingHours()->createMany($data['working_hours']);
     }
 
-    public function delete($id)
+    public function delete($serviceProvider)
     {
-        $serviceProvider = $this->show($id);
         $serviceProvider->categories()->delete();
         $serviceProvider->workingHours()->delete();
         $serviceProvider->delete();
     }
 
-    public function findForPassport($username)
+    public function getModel($username)
     {
         return $this->serviceProvider->where('email', $username)->first();
     }
 
-    public function setProvider()
+    public function getProvider()
     {
         return ProviderType::SERVICE_PROVIDER;
     }
 
-    public function distance($geometry)
+    public function distance($data)
     {
-        return $this->serviceProvider->contains('area', $geometry)->get();
+        $geometry = new Point($data['lat'], $data['long']);
+        return $this->serviceProvider
+        ->contains('area', $geometry)
+        ->orderByDistance('area',$geometry)
+        ->get();
     }
 }
