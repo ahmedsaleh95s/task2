@@ -7,6 +7,7 @@ use App\Interfaces\AuthInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\Admin;
+use Carbon\Carbon;
 
 class UserRepositories implements AuthInterface
 {
@@ -61,17 +62,23 @@ class UserRepositories implements AuthInterface
 
     public function reservation($data, $serviceProvider)
     {
+        $dateFrom = $data['from'] = Carbon::parse($data['from']);
         $workingHours = $serviceProvider->workingHours()
-        ->where('day', $data['day'])
-        ->where('from', '<=', $data['from'])
-        ->where('to', '>=', $data['to'])
+        ->where('day', (string)$dateFrom->dayOfWeek) // from carbon
+        ->where('from', '<=', $dateFrom->format('h:i A')) // from carbon
         ->first();
-        if ($workingHours) {
+        if ($workingHours && !$workingHours->reservations()->where('from', '!=', $data['from'])->count()) {
             $data['working_hour_id'] = $workingHours->id;
-            $data['total'] = $workingHours->price - (100 / Admin::first()->commission);
+            $data['to'] = $dateFrom->addMinutes($serviceProvider->allowed_time);
+            $data['total'] = $serviceProvider->price + $serviceProvider->price * (Admin::first()->commission /100);
             auth()->user()->reservations()->create($data);
         }else {
             return abort(response()->json(["error" => ["no time avaiable"]]));
         }
+    }
+
+    public function all()
+    {
+        return $this->user->all();
     }
 }

@@ -68,4 +68,9 @@ class UserService
     {
         $this->userRepo->reservation($data, $serviceProvider);
     }
+
+    public function all()
+    {
+        return $this->userRepo->all();
+    }
 }

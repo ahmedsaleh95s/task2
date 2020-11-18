@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\TokenResource;
 use App\Http\Requests\AdminLoginRequest;
@@ -25,7 +24,9 @@ class AdminController extends Controller
     public function login(AdminLoginRequest $request, ServerRequestInterface $auth)
     {
         $response = $this->authService->login($request->all(), $auth);
-        return [new AdminResource($response['user']), new TokenResource(json_decode($response['token']))];
+        $result['user'] = new AdminResource($response['user']);
+        $result['token'] = new TokenResource(json_decode($response['token']));
+        return $result;
     }
 
     public function commission(StoreAdminCommisionRequest $request)

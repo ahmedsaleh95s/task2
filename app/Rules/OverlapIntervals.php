@@ -28,7 +28,9 @@ class OverlapIntervals implements Rule
     {
         //
         $array = Arr::where(request()->input('working_hours'), function ($value, $index) use($key, $current){
+            if ($value) {
             return $value['day'] == $current['day'] && $value['to'] > $current['to'] && $current['to'] > $value['from'];
+            }
         });
         return (count($array) == 0) ? true : false ;
     }

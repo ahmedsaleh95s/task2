@@ -31,7 +31,7 @@ class ServiceProviderController extends Controller
         ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function all()
+    public function index()
     {
         $serviceProviders = $this->serviceProviderService->all();
         return ServiceProviderResource::collection($serviceProviders);
@@ -48,7 +48,7 @@ class ServiceProviderController extends Controller
         return response()->json(["message" => "success"]);
     }
 
-    public function delete(ServiceProvider $serviceProvider)
+    public function destroy(ServiceProvider $serviceProvider)
     {
         $this->serviceProviderService->delete($serviceProvider);
         return response()->json(["message" => "success"]);

@@ -20,12 +20,11 @@ use App\Services\ServiceProviderService;
 class UserController extends Controller
 {
     //
-    private $authService, $userService, $serviceProviderService;
+    private $authService, $userService;
 
-    public function __construct( UserService $userService, AuthService $authService, ServiceProviderService $serviceProviderService) {
+    public function __construct( UserService $userService, AuthService $authService) {
         $this->userService = $userService;
         $this->authService = $authService;
-        $this->serviceProviderService = $serviceProviderService;
     }
 
     public function register(CreateUserRequest $request)
@@ -38,7 +37,9 @@ class UserController extends Controller
     public function login(LoginRequest $request, ServerRequestInterface $auth)
     {
         $response = $this->authService->login($request->all(), $auth);
-        return [new UserResource($response['user']), new TokenResource(json_decode($response['token']))];
+        $result['user'] = new UserResource($response['user']);
+        $result['token'] = new TokenResource(json_decode($response['token']));
+        return $result;
     }
 
     public function forgetPassword(ForgetPasswordRequest $request, ServerRequestInterface $auth)
@@ -64,5 +65,11 @@ class UserController extends Controller
         $this->userService->reservation($request->all(), $serviceProvider);
         return response()->json(["message" => "success"])
         ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function index()
+    {
+        $users = $this->userService->all();
+        return UserResource::collection($users);
     }
 }

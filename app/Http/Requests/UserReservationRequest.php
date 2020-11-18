@@ -25,9 +25,7 @@ class UserReservationRequest extends FormRequest
     {
         return [
             //
-            'from' => ['required', 'date_format:h:i A'],
-            'to' => ['required','after:from','date_format:h:i A'],
-            'day' => 'required|numeric|min:0|max:6',
+            'from' => ['required', 'date'],
         ];
     }
 }

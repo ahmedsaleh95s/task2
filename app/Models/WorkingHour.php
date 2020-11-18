@@ -18,4 +18,9 @@ class WorkingHour extends Model
         'allowed_time',
         'price'
     ];
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

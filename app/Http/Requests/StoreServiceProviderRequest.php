@@ -45,8 +45,8 @@ class StoreServiceProviderRequest extends FormRequest
             'working_hours.*.from' => ['required', 'date_format:h:i A'], // 
             'working_hours.*.to' => ['required','after:working_hours.*.from','date_format:h:i A'],
             'working_hours.*.day' => 'required|numeric|min:0|max:6',
-            'working_hours.*.allowed_time' => ['required','numeric'], // need extra validation
-            'working_hours.*.price' => 'required|numeric',
+            'allowed_time' => ['required','numeric'], // need extra validation
+            'price' => 'required|numeric',
             'password' => 'required|min:8',
         ];
     }

@@ -9,6 +9,6 @@ trait FileTrait
 {
     public function uploadFile($file, $path)
     {
-        return Storage::put($path, $file);
+        return Storage::put('public/'.$path, $file);
     }
 }

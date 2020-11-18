@@ -24,6 +24,8 @@ class ServiceProviderResource extends JsonResource
             "email" => $this->email,
             "location" => $this->location,
             "area" => $this->area,
+            'price' => $this->price,
+            'allowed_time' => $this->allowed_time,
             "categories" => CategoryResource::collection($this->categories),
             "working_hours" => WorkingHoursResource::collection($this->workingHours),
         ];
