@@ -9,6 +9,11 @@
 
 </head>
 <body>
+    <script>
+      if (JSON.parse(localStorage.getItem('admin')) == null) {
+        window.location.replace("/admin/login");
+      }
+    </script>
   <input type="search" name="search" id="search">
 <table class="table table-dark">
   <thead>

@@ -66,7 +66,7 @@ $(".register-btn").click(function (e) {
         success: function (data) {
             $('.success-alert-login').append('<div class="alert alert-success"><strong>Registed successfully</strong></div>');
             $(".success-alert-login").fadeOut(3000);
-            // window.location.replace("/user/all");
+            window.location.replace("/user/login");
         },
         error: function (xhr) {
             var errors = xhr.responseJSON.errors;
