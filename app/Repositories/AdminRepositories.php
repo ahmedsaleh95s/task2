@@ -28,4 +28,9 @@ class AdminRepositories implements AuthInterface
     {
         auth()->user()->update(['commission' => $data['commission']]);
     }
+
+    public function getCommission()
+    {
+        return $this->admin->first()->commission;
+    }
 }

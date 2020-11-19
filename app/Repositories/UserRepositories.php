@@ -7,7 +7,6 @@ use App\Interfaces\AuthInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\Admin;
-use Carbon\Carbon;
 
 class UserRepositories implements AuthInterface
 {
@@ -60,21 +59,23 @@ class UserRepositories implements AuthInterface
         return ProviderType::USER;
     }
 
-    public function reservation($data, $serviceProvider)
+    public function reservation($data)
     {
-        $dateFrom = $data['from'] = Carbon::parse($data['from']);
-        $workingHours = $serviceProvider->workingHours()
-        ->where('day', (string)$dateFrom->dayOfWeek) // from carbon
-        ->where('from', '<=', $dateFrom->format('h:i A')) // from carbon
+        auth()->user()->reservations()->create($data);
+    }
+
+    public function getProviderWorkingHour($serviceProvider, $day, $from, $to)
+    {
+        return $serviceProvider->workingHours()
+        ->where('day', $day)
+        ->where('from', '<=', $from)
+        ->where('to', '>=', $to)
         ->first();
-        if ($workingHours && !$workingHours->reservations()->where('from', '!=', $data['from'])->count()) {
-            $data['working_hour_id'] = $workingHours->id;
-            $data['to'] = $dateFrom->addMinutes($serviceProvider->allowed_time);
-            $data['total'] = $serviceProvider->price + $serviceProvider->price * (Admin::first()->commission /100);
-            auth()->user()->reservations()->create($data);
-        }else {
-            return abort(response()->json(["error" => ["no time avaiable"]]));
-        }
+    }
+
+    public function getWorkingHoursReservations($workingHours, $from)
+    {
+        return $workingHours->reservations()->where('from', $from)->count();
     }
 
     public function all()

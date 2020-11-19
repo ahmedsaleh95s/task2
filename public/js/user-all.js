@@ -20,13 +20,33 @@ $(document).ready(function () {
                     '<th scope="col"><img class="rounded-circle img-size" src="' + data.data[index].image.image + '"/></th>' +
                     '</tr>');
             }
-        }
+        },
+        error: function (xhr) {
+          var errors = xhr.responseJSON.errors;
+          if (xhr.status == 401) {
+            window.location.replace("/admin/login");
+          }
+      }
     });
 
-    $("#search").on("keyup", function() {
+    $("#searchName").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $(".table-add tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          $(this).toggle($(this).find('td').eq(0).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+
+      $("#searchEmail").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $(".table-add tr").filter(function() {
+          $(this).toggle($(this).find('td').eq(1).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+
+      $("#searchPhone").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $(".table-add tr").filter(function() {
+          $(this).toggle($(this).find('td').eq(2).text().toLowerCase().indexOf(value) > -1)
         });
       });
 });

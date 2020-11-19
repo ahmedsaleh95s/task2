@@ -9,12 +9,12 @@
 
 </head>
 <body>
-    <script>
-      if (JSON.parse(localStorage.getItem('admin')) == null) {
-        window.location.replace("/admin/login");
-      }
-    </script>
-  <input type="search" name="search" id="search">
+  <label for="name">Name</label>
+  <input type="search" name="searchName" id="searchName">
+  <label for="email">Email</label>
+  <input type="search" name="searchEmail" id="searchEmail">
+  <label for="phone">Phone</label>
+  <input type="search" name="searchPhone" id="searchPhone">
 <table class="table table-dark">
   <thead>
     <tr>
