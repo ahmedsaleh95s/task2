@@ -24,7 +24,8 @@ class AdminFactory extends Factory
         return [
             //
             'email' => $this->faker->unique()->freeEmail,
-            'password' => '12345678'
+            'password' => '12345678',
+            'commission' => 2.5
         ];
     }
 }

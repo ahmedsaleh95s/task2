@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgetPassword;
 use App\Repositories\AdminRepositories;
 use App\Repositories\ServiceProviderRepositories;
+use App\Repositories\WorkingHoursRepositories;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 use App\Traits\HasAuthentication;
@@ -14,6 +15,7 @@ use Kreait\Firebase\DynamicLinks;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
 use App\Traits\FileTrait;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class UserService
 {
@@ -68,24 +70,48 @@ class UserService
 
     public function reservation($data, $serviceProvider)
     {
-        $date = Carbon::parse($data['from']);
-        $workingHours = $this->userRepo->getProviderWorkingHour($serviceProvider, (string)$date->dayOfWeek, $date->format('h:i A'), $date->addMinutes($serviceProvider->allowed_time)->format('h:i A'));
-        $has_reservations = $this->userRepo->getWorkingHoursReservations($workingHours, Carbon::parse($data['from']));
-        if ($workingHours && ! $has_reservations) {
-            $data['working_hour_id'] = $workingHours->id;
+        $data['from'] = Carbon::parse($data['from']);
+        $data['to'] = Carbon::parse($data['to']);
+        $dateFrom = clone $data['from'];
+        $dateTo = clone $data['to'];
+        $workingHours = app(ServiceProviderRepositories::class)->workingHours($serviceProvider, (string)$dateFrom->dayOfWeek);
+        $workingHour = $this->getInterval($workingHours, $serviceProvider, $dateFrom, $dateTo);
+        $data['working_hour_id'] = $workingHour->id;
+        $reservationCounts = app(WorkingHoursRepositories::class)->getWorkingHoursReservations($workingHour, $data['from'], $data['to']);
+        if ($reservationCounts == 0) {
             $data['total'] = $this->calculateTotal($serviceProvider->price);
-            $data['from'] = Carbon::parse($data['from']);
-            $data['to'] = Carbon::parse($data['from'])->addMinutes($serviceProvider->allowed_time);
             $this->userRepo->reservation($data);
-            return ;
+            return;
         }
         return abort(response()->json(["error" => ["Reservation Failed"]]));
     }
 
+    public function getInterval($workingHours, $serviceProvider, $dateFrom, $dateTo)
+    {
+        if (count($workingHours) > 0) {
+            foreach ($workingHours as $workingHour) {
+                $start = $workingHour->from;
+                while ($start < $workingHour->to) {
+                    $intervals['from'] = $start;
+                    $intervals['to'] = $start =
+                        Carbon::parse($start)
+                        ->addMinutes($serviceProvider->allowed_time)
+                        ->format('h:i A');
+                    if ($dateTo->format('h:i A') == $intervals['to'] && $dateFrom->format('h:i A') == $intervals['from']) {
+                        return  $workingHour;
+                    }
+                }
+            }
+            return abort(response()->json(["error" => ["This Interval not matched"]], 422));
+        }
+        return abort(response()->json(["error" => ["No Working Hours exists"]], 422));
+    }
+
     public function calculateTotal($price)
     {
-        return $price + $price * (app(AdminRepositories::class)->getCommission() /100);
+        return $price + $price * (app(AdminRepositories::class)->getCommission() / 100);
     }
+
     public function all()
     {
         return $this->userRepo->all();

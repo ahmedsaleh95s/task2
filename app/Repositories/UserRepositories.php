@@ -64,20 +64,6 @@ class UserRepositories implements AuthInterface
         auth()->user()->reservations()->create($data);
     }
 
-    public function getProviderWorkingHour($serviceProvider, $day, $from, $to)
-    {
-        return $serviceProvider->workingHours()
-        ->where('day', $day)
-        ->where('from', '<=', $from)
-        ->where('to', '>=', $to)
-        ->first();
-    }
-
-    public function getWorkingHoursReservations($workingHours, $from)
-    {
-        return $workingHours->reservations()->where('from', $from)->count();
-    }
-
     public function all()
     {
         return $this->user->all();

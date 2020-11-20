@@ -11,6 +11,7 @@ $(document).ready(function () {
             all = data;
             console.log(data.data[0].image.image);
             for (let index = 0; index < data.data.length; index++) {
+              // laravel data table 
                 $('.table-add').append(
                     '<tr>' +
                     '<th scope="col">#' + data.data[index]['id'] + '</th>' +

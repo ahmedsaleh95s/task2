@@ -92,4 +92,9 @@ class ServiceProviderRepositories implements AuthInterface
         ->orderByDistance('area',$geometry)
         ->get();
     }
+
+    public function workingHours($serviceProvider, $day)
+    {
+        return $serviceProvider->workingHours()->where('day', $day)->get();
+    }
 }
