@@ -91,7 +91,7 @@ class UserService
         if (count($workingHours) > 0) {
             foreach ($workingHours as $workingHour) {
                 $start = $workingHour->from;
-                while ($start < $workingHour->to) {
+                while ($start < $workingHour->to && Carbon::parse($workingHour->to)->diffInMinutes(Carbon::parse($start)) >= $serviceProvider->allowed_time) {
                     $intervals['from'] = $start;
                     $intervals['to'] = $start =
                         Carbon::parse($start)
@@ -100,6 +100,7 @@ class UserService
                     if ($dateTo->format('h:i A') == $intervals['to'] && $dateFrom->format('h:i A') == $intervals['from']) {
                         return  $workingHour;
                     }
+                    Carbon::parse($workingHour->to)->diffInMinutes(Carbon::parse($start));
                 }
             }
             return abort(response()->json(["error" => ["This Interval not matched"]], 422));

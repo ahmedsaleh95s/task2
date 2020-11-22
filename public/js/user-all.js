@@ -30,24 +30,12 @@ $(document).ready(function () {
       }
     });
 
-    $("#searchName").on("keyup", function() {
+    $(".search").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $(".table-add tr").filter(function() {
-          $(this).toggle($(this).find('td').eq(0).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-
-      $("#searchEmail").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $(".table-add tr").filter(function() {
-          $(this).toggle($(this).find('td').eq(1).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-
-      $("#searchPhone").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $(".table-add tr").filter(function() {
-          $(this).toggle($(this).find('td').eq(2).text().toLowerCase().indexOf(value) > -1)
+          $(this).toggle(
+            $(this).find('td').eq(0).text().toLowerCase().indexOf(value) > -1
+            )
         });
       });
 });

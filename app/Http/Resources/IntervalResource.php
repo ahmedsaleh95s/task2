@@ -15,9 +15,9 @@ class IntervalResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "day" => $this->day,
-            "from" => $this->from,
-            "to" => $this->to,
+            "day" => $this['day'],
+            "from" => $this['from'],
+            "to" => $this['to'],
         ];
     }
 }

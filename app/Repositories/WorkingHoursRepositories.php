@@ -15,8 +15,8 @@ class WorkingHoursRepositories
     public function getWorkingHoursReservations($workingHours, $from, $to)
     {
         return $workingHours->reservations()
-        ->where('from', $from)
-        ->where('to', $to)
+        ->where('from', $from) // >=
+        ->where('to', $to) // <=
         ->count();
     }
 

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repositories\ServiceProviderRepositories;
 use App\Traits\FileTrait;
-use Carbon\Carbon;
 
 class ServiceProviderService
 {
@@ -70,29 +69,5 @@ class ServiceProviderService
     public function delete($serviceProvider)
     {
         $this->serviceProviderRepo->delete($serviceProvider);
-    }
-
-    public function intervals($serviceProvider)
-    {
-        $workingHours = $this->serviceProviderRepo->workingHours($serviceProvider);
-        return $this->getIntervals($workingHours, $serviceProvider);
-    }
-
-    public function getIntervals($workingHours, $serviceProvider)
-    {
-        $index = 0;
-        foreach ($workingHours as $workingHour) {
-            $start = $workingHour->from;
-            while ($start < $workingHour->to) {
-                $intervals[$index]['day'] = $workingHour->day;
-                $intervals[$index]['from'] = $start;
-                $intervals[$index]['to'] = $start =
-                    Carbon::parse($start)
-                    ->addMinutes($serviceProvider->allowed_time)
-                    ->format('h:i A');
-                $index++;
-            }
-        }
-        return $intervals;
     }
 }

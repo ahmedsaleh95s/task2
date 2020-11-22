@@ -93,9 +93,9 @@ class ServiceProviderRepositories implements AuthInterface
         ->get();
     }
 
-    public function workingHoursByColumn($serviceProvider, $column, $day)
+    public function workingHoursByColumn($serviceProvider, $column, $value)
     {
-        return $serviceProvider->workingHours()->where($column, $day)->get();
+        return $serviceProvider->workingHours()->where($column, $value)->get();
     }
 
     public function workingHours($serviceProvider)

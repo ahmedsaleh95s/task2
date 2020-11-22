@@ -10,11 +10,11 @@
 </head>
 <body>
   <label for="name">Name</label>
-  <input type="search" name="searchName" id="searchName">
+  <input type="search" name="searchName" class="search" id="0">
   <label for="email">Email</label>
-  <input type="search" name="searchEmail" id="searchEmail">
+  <input type="search" name="searchEmail" class="search" id="1">
   <label for="phone">Phone</label>
-  <input type="search" name="searchPhone" id="searchPhone">
+  <input type="search" name="searchPhone" class="search" id="2">
 <table class="table table-dark">
   <thead>
     <tr>
