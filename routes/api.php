@@ -17,6 +17,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
         Route::prefix('users')->group(function (){
             Route::get('/service-provider/distance', 'UserController@distance')->name('user-distance');
             Route::post('/reservation/{serviceProvider}', 'UserController@reservation')->name('user-reservation');
+            Route::get('/intervals/{serviceProvider}', 'ServiceProviderController@intervals')->name('intervals');
         });
     });
 

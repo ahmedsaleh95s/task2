@@ -74,7 +74,7 @@ class UserService
         $data['to'] = Carbon::parse($data['to']);
         $dateFrom = clone $data['from'];
         $dateTo = clone $data['to'];
-        $workingHours = app(ServiceProviderRepositories::class)->workingHours($serviceProvider, (string)$dateFrom->dayOfWeek);
+        $workingHours = app(ServiceProviderRepositories::class)->workingHoursByColumn($serviceProvider, 'day', (string)$dateFrom->dayOfWeek);
         $workingHour = $this->getInterval($workingHours, $serviceProvider, $dateFrom, $dateTo);
         $data['working_hour_id'] = $workingHour->id;
         $reservationCounts = app(WorkingHoursRepositories::class)->getWorkingHoursReservations($workingHour, $data['from'], $data['to']);

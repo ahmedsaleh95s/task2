@@ -6,6 +6,7 @@ use App\Http\Requests\ServiceProviderLoginRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreServiceProviderRequest;
 use App\Http\Requests\UpdateServiceProviderRequest;
+use App\Http\Resources\IntervalResource;
 use App\Http\Resources\ServiceProviderResource;
 use App\Services\ServiceProviderService;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,5 +59,12 @@ class ServiceProviderController extends Controller
     {
         $response = $this->authService->login($request->all(), $auth);
         return [new ServiceProviderResource($response['user']), new TokenResource(json_decode($response['token']))];
+    }
+
+    public function intervals(ServiceProvider $serviceProvider)
+    {
+        $intervals = $this->serviceProviderService->intervals($serviceProvider);
+        $intervals = (json_encode($intervals));
+        return IntervalResource::collection(json_decode($intervals));
     }
 }
