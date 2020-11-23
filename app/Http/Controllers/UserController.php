@@ -16,13 +16,14 @@ use App\Http\Requests\UserReservationRequest;
 use App\Http\Resources\ServiceProviderResource;
 use App\Models\ServiceProvider;
 use App\Services\ServiceProviderService;
+use App\Interfaces\AuthInterface;
 
 class UserController extends Controller
 {
     //
-    private $authService, $userService;
+    private $authService, $userService, $authInterface;
 
-    public function __construct( UserService $userService, AuthService $authService) {
+    public function __construct( UserService $userService, AuthService $authService, AuthInterface $authInterface) {
         $this->userService = $userService;
         $this->authService = $authService;
     }
@@ -36,7 +37,7 @@ class UserController extends Controller
 
     public function login(LoginRequest $request, ServerRequestInterface $auth)
     {
-        $response = $this->authService->login($request->all(), $auth);
+        $response = $this->authService->login($request->all(), $auth, $this->authInterface);
         $result['user'] = new UserResource($response['user']);
         $result['token'] = new TokenResource(json_decode($response['token']));
         return $result;

@@ -6,6 +6,7 @@ use App\Http\Resources\AdminResource;
 use App\Http\Resources\TokenResource;
 use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\StoreAdminCommisionRequest;
+use App\Interfaces\AuthInterface;
 use App\Services\AdminService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\AuthService;
@@ -14,16 +15,17 @@ use Psr\Http\Message\ServerRequestInterface;
 class AdminController extends Controller
 {
     //
-    private $authService, $adminService;
+    private $authService, $adminService , $authInterface;
 
-    public function __construct(AuthService $authService, AdminService $adminService) {
+    public function __construct(AuthInterface $authInterface, AdminService $adminService, AuthService $authService) {
         $this->authService = $authService;
         $this->adminService = $adminService;
+        $this->authInterface = $authInterface;
     }
 
     public function login(AdminLoginRequest $request, ServerRequestInterface $auth)
     {
-        $response = $this->authService->login($request->all(), $auth);
+        $response = $this->authService->login($request->all(), $auth, $this->authInterface);
         $result['user'] = new AdminResource($response['user']);
         $result['token'] = new TokenResource(json_decode($response['token']));
         return $result;

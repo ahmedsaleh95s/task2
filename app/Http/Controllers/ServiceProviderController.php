@@ -14,15 +14,17 @@ use Psr\Http\Message\ServerRequestInterface;
 use App\Http\Resources\TokenResource;
 use App\Services\AuthService;
 use App\Models\ServiceProvider;
+use App\Interfaces\AuthInterface;
 
 class ServiceProviderController extends Controller
 {
     //
-    private $serviceProviderService, $authService;
+    private $serviceProviderService, $authService, $authInterface;
     
-    public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService) {
+    public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService, AuthInterface $authInterface) {
         $this->serviceProviderService = $serviceProviderService;
         $this->authService = $authService;
+        $this->authInterface = $authInterface;
     }
 
     public function store(StoreServiceProviderRequest $request)
@@ -57,7 +59,7 @@ class ServiceProviderController extends Controller
 
     public function login(ServiceProviderLoginRequest $request, ServerRequestInterface $auth)
     {
-        $response = $this->authService->login($request->all(), $auth);
+        $response = $this->authService->login($request->all(), $auth, $this->authInterface);
         return [new ServiceProviderResource($response['user']), new TokenResource(json_decode($response['token']))];
     }
 }

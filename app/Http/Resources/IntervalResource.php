@@ -18,6 +18,7 @@ class IntervalResource extends JsonResource
             "day" => $this['day'],
             "from" => $this['from'],
             "to" => $this['to'],
+            "reserved" => $this['reserved']
         ];
     }
 }

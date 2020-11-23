@@ -18,13 +18,10 @@ class AuthService
 
     private $authInterface;
     
-    public function __construct(AuthInterface $authInterface) {
-        $this->authInterface = $authInterface;
-    }
 
-    public function login($data, $auth) // login in service
+    public function login($data, $auth, $authRepo) // login in service
     {
-        $token = $this->tokenRequest($auth, $data, $this->authInterface->getProvider());
+        $token = $this->tokenRequest($auth, $data, $authRepo->getProvider());
         if ($token['statusCode'] == Response::HTTP_OK) {
             $result['user'] = $this->authInterface->getModel($data['email']);
             $result['token'] = $token['response'];
