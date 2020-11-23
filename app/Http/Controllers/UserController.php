@@ -72,4 +72,5 @@ class UserController extends Controller
         $users = $this->userService->all();
         return UserResource::collection($users);
     }
+    
 }
