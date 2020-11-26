@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ServiceProvidersDataTable;
 use App\Http\Requests\ServiceProviderLoginRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreServiceProviderRequest;
@@ -15,34 +16,45 @@ use App\Http\Resources\TokenResource;
 use App\Services\AuthService;
 use App\Models\ServiceProvider;
 use App\Interfaces\AuthInterface;
+use Yajra\Datatables\Datatables;
+use App\Http\Requests\GetServiceProviderRequest;
+use CategoryServiceProviderTable;
+use Yajra\DataTables\CollectionDataTable;
 
 class ServiceProviderController extends Controller
 {
     //
-    private $serviceProviderService, $authService, $authInterface;
-    
-    public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService, AuthInterface $authInterface) {
+    private $serviceProviderService, $authService, $authInterface, $dataTable;
+
+    public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService, AuthInterface $authInterface, ServiceProvidersDataTable $dataTable)
+    {
         $this->serviceProviderService = $serviceProviderService;
         $this->authService = $authService;
         $this->authInterface = $authInterface;
+        $this->dataTable = $dataTable;
     }
 
     public function store(StoreServiceProviderRequest $request)
     {
         $this->serviceProviderService->store($request->all());
         return response()->json(["message" => "success"])
-        ->setStatusCode(Response::HTTP_CREATED);
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function index()
     {
         $serviceProviders = $this->serviceProviderService->all();
-        return ServiceProviderResource::collection($serviceProviders);
+        return Datatables::of(ServiceProviderResource::collection($serviceProviders))
+            ->make(true);
     }
 
     public function show(ServiceProvider $serviceProvider)
     {
-        return new ServiceProviderResource($serviceProvider);
+        if (request()->ajax()) {
+            return DataTables::of($serviceProvider->getIntervals())
+                ->toJson();
+        }
+        return $this->dataTable->render('service-providers.details');
     }
 
     public function update(UpdateServiceProviderRequest $request, ServiceProvider $serviceProvider)
@@ -61,5 +73,11 @@ class ServiceProviderController extends Controller
     {
         $response = $this->authService->login($request->all(), $auth, $this->authInterface);
         return [new ServiceProviderResource($response['user']), new TokenResource(json_decode($response['token']))];
+    }
+
+    public function distance(GetServiceProviderRequest $request)
+    {
+        $serviceProviders = $this->serviceProviderService->distance($request->all());
+        return DataTables::of(ServiceProviderResource::collection($serviceProviders))->toJson();
     }
 }

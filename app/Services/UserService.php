@@ -63,11 +63,6 @@ class UserService
         return json_decode($link, true);
     }
 
-    public function distance($data)
-    {
-        return $this->serviceProviderRepo->distance($data);
-    }
-
     public function reservation($data, $serviceProvider)
     {
         $data['from'] = Carbon::parse($data['from']);
@@ -83,7 +78,7 @@ class UserService
             $this->userRepo->reservation($data);
             return;
         }
-        return abort(response()->json(["error" => ["Reservation Failed"]]));
+        return abort(response()->json(["error" => ["Reservation Failed"]], 422));
     }
 
     public function getInterval($workingHours, $serviceProvider, $dateFrom, $dateTo)

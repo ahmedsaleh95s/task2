@@ -41,7 +41,7 @@ $('.login-btn').click(function (e) {
             $('.success-alert-login').append('<div class="alert alert-success"><strong>Login successfully</strong></div>');
             $(".success-alert-login").fadeOut(3000);
             localStorage.setItem("user", JSON.stringify(data.user));
-            localStorage.setItem("token", JSON.stringify(data.token.access_token));
+            localStorage.setItem("tokenUser", JSON.stringify(data.token.access_token));
             window.location.replace("/admin/login");
         },
         error: function (xhr) {

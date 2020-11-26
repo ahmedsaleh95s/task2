@@ -30,7 +30,7 @@ class StoreServiceProviderRequest extends FormRequest
             //
             'name_ar' => 'required|min:3|max:150',
             'name_en' => 'required|min:3|max:150',
-            'phone' => ['required', 'regex:/^(0|\+)?(966|5|)(\d{9})$/'],
+            'phone' => ['required', 'unique:service_providers', 'regex:/^(0|\+)?(966|5|)(\d{9})$/'],
             'email' => 'required|email:rfc,dns|unique:service_providers',
             'lat' => ['required','regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'], 
             'long' => ['required','regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],

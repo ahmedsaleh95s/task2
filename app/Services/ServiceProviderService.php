@@ -70,4 +70,10 @@ class ServiceProviderService
     {
         $this->serviceProviderRepo->delete($serviceProvider);
     }
+
+    public function distance($data)
+    {
+        return $this->serviceProviderRepo->distance($data);
+    }
+    
 }

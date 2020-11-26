@@ -9,7 +9,6 @@ use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\ForgetPasswordRequest;
-use App\Http\Requests\GetServiceProviderRequest;
 use App\Http\Resources\TokenResource;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UserReservationRequest;
@@ -17,15 +16,19 @@ use App\Http\Resources\ServiceProviderResource;
 use App\Models\ServiceProvider;
 use App\Services\ServiceProviderService;
 use App\Interfaces\AuthInterface;
+use App\Models\User;
+use App\DataTables\UsersDataTable;
 
 class UserController extends Controller
 {
     //
-    private $authService, $userService, $authInterface;
+    private $authService, $userService, $authInterface, $dataTable;
 
-    public function __construct( UserService $userService, AuthService $authService, AuthInterface $authInterface) {
+    public function __construct( UserService $userService, AuthService $authService, AuthInterface $authInterface, UsersDataTable $dataTable) {
         $this->userService = $userService;
         $this->authService = $authService;
+        $this->authInterface = $authInterface;
+        $this->dataTable = $dataTable;
     }
 
     public function register(CreateUserRequest $request)
@@ -55,12 +58,6 @@ class UserController extends Controller
         return response()->json(["message" => "success"]);
     }
 
-    public function distance(GetServiceProviderRequest $request)
-    {
-        $serviceProviders = $this->userService->distance($request->all());
-        return ServiceProviderResource::collection($serviceProviders);
-    }
-
     public function reservation(UserReservationRequest $request, ServiceProvider $serviceProvider)
     {
         $this->userService->reservation($request->all(), $serviceProvider);
@@ -70,8 +67,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = $this->userService->all();
-        return UserResource::collection($users);
+        return $this->dataTable->render('users.index');
     }
     
 }

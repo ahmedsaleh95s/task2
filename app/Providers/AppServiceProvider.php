@@ -40,8 +40,6 @@ class AppServiceProvider extends ServiceProvider
                 return app(ServiceProviderRepositories::class);
             });
     }
-    
-
 
     /**
      * Bootstrap any application services.

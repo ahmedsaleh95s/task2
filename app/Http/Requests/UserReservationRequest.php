@@ -26,6 +26,7 @@ class UserReservationRequest extends FormRequest
         return [
             //
             'from' => ['required', 'date'],
+            'to' => ['required', 'after:from','date'],
         ];
     }
 }

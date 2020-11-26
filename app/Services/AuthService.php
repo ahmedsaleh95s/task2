@@ -14,16 +14,13 @@ use function PHPUnit\Framework\throwException;
 class AuthService
 {
 
-    use HasAuthentication;
-
-    private $authInterface;
-    
+    use HasAuthentication;    
 
     public function login($data, $auth, $authRepo) // login in service
     {
         $token = $this->tokenRequest($auth, $data, $authRepo->getProvider());
         if ($token['statusCode'] == Response::HTTP_OK) {
-            $result['user'] = $this->authInterface->getModel($data['email']);
+            $result['user'] = $authRepo->getModel($data['email']);
             $result['token'] = $token['response'];
             return $result;
         }
