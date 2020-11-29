@@ -60,7 +60,7 @@ class UserController extends Controller
 
     public function reservation(UserReservationRequest $request, ServiceProvider $serviceProvider)
     {
-        $this->userService->reservation($request->all(), $serviceProvider);
+        return $this->userService->reservation($request->all(), $serviceProvider);
         return response()->json(["message" => "success"])
         ->setStatusCode(Response::HTTP_CREATED);
     }

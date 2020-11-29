@@ -61,20 +61,6 @@
                             data: 'phone',
                             name: 'phone'
                         },
-                        {
-                            data: 'action',
-                            name: 'ACTION',
-                            render:function(data, type, row){
-                                return '<input class="form-control from" type="datetime-local"><input class="form-control to" type="datetime-local"><button type="submit" id="'+row.id +'" style="margin-top: 1%;" class="btn btn-info col-12">RESERVE</button>';
-                            }
-                        },
-                        // {
-                        //     data: 'action',
-                        //     name: 'ACTION',
-                        //     render:function(data, type, row){
-                        //         return "<a href='/user/reserve/"+ row.id +"'>RESERVE</a>";
-                        //     }
-                        // },
                     ],
                     initComplete: function() {
                         $('.btn').click(function (e) { 

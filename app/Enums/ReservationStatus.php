@@ -11,6 +11,6 @@ use BenSampo\Enum\Enum;
  */
 final class ReservationStatus extends Enum
 {
-    const NOT_RESERVED =   'NO';
-    const  RESERVED =   'YES';
+    const NOT_RESERVED =   "NO";
+    const  RESERVED =   "YES";
 }

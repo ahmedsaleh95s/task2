@@ -65,10 +65,15 @@ class ServiceProvidersDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('from'),
-            Column::make('to'),
+            Column::make('from')->addClass('from'),
+            Column::make('to')->addClass('to'),
             Column::make('day'),
             Column::make('reserved'),
+            Column::computed('action')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->width(60)
+                  ->addClass('text-center')
         ];
     }
 

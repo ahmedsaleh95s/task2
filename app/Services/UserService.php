@@ -100,7 +100,7 @@ class UserService
             }
             return abort(response()->json(["error" => ["This Interval not matched"]], 422));
         }
-        return abort(response()->json(["error" => ["No Working Hours exists"]], 422));
+        return abort(response()->json(["error" => ["This Interval Is Not Avaliable"]], 422));
     }
 
     public function calculateTotal($price)

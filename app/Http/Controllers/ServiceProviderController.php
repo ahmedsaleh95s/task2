@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ServiceProvidersDataTable;
+use App\Enums\ReservationStatus;
 use App\Http\Requests\ServiceProviderLoginRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreServiceProviderRequest;
@@ -51,7 +52,11 @@ class ServiceProviderController extends Controller
     public function show(ServiceProvider $serviceProvider)
     {
         if (request()->ajax()) {
-            return DataTables::of($serviceProvider->getIntervals())
+            $collection = $serviceProvider->getIntervals();
+            return DataTables::of($collection)
+                ->addColumn('action', function () use ($serviceProvider) {
+                    return '<button type="submit" id="' . $serviceProvider->id . '" style="margin-top: 1%;" class="btn btn-info col-12">RESERVE</button>';
+                })
                 ->toJson();
         }
         return $this->dataTable->render('service-providers.details');

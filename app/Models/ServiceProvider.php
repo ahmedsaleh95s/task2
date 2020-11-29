@@ -63,13 +63,14 @@ class ServiceProvider extends Authenticatable
         foreach ($this->workingHours as $workingHour) {
             $start = $workingHour->from;
             while ($start < $workingHour->to && Carbon::parse($workingHour->to)->diffInMinutes(Carbon::parse($start)) >= $this->allowed_time) {
-                $intervals[$index]['day'] =  Carbon::create($workingHour->day)->locale('en_US')->dayName;
+                $intervals[$index]['dayNumber'] =  $workingHour->day;
                 $intervals[$index]['from'] = $from = $start;
                 $intervals[$index]['to'] = $start =
                     Carbon::parse($start)
                     ->addMinutes($this->allowed_time)
                     ->format('h:i A');
                 $reserved = +$this->getReserved($workingHour->reservations, $intervals[$index]);
+                $intervals[$index]['day'] =  Carbon::create($workingHour->day)->locale('en_US')->dayName;
                 $intervals[$index]['reserved'] = ($reserved) ? ReservationStatus::RESERVED : ReservationStatus::NOT_RESERVED;
                 $index++;
             }
@@ -82,7 +83,7 @@ class ServiceProvider extends Authenticatable
         return $reservations->contains(function ($value, $key) use($interval){
             $dateFrom = Carbon::parse($value->from);
             $dateTo = Carbon::parse($value->to); // check range not equal
-            return (string)$dateFrom->dayOfWeek == $interval['day'] && $dateFrom->format('h:i A') >= $interval['from'] && $dateTo->format('h:i A') <= $interval['to'];
+            return (string)$dateFrom->dayOfWeek == $interval['dayNumber'] && $dateFrom->format('h:i A') >= $interval['from'] && $dateTo->format('h:i A') <= $interval['to'];
         });
     }
 }
