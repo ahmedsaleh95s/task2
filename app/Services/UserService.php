@@ -112,4 +112,14 @@ class UserService
     {
         return $this->userRepo->all();
     }
+
+    public function delete($user)
+    {
+        $this->userRepo->delete($user);
+    }
+
+    public function update($data, $user)
+    {
+        $this->userRepo->update($data, $user);
+    }
 }

@@ -68,4 +68,16 @@ class UserRepositories implements AuthInterface
     {
         return $this->user->all();
     }
+
+    public function delete($user)
+    {
+        $user->image()->delete();
+        $user->reservations()->delete();
+        $user->delete();
+    }
+
+    public function update($data, $user)
+    {
+        $user->update($data);
+    }
 }

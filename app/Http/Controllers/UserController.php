@@ -18,6 +18,7 @@ use App\Services\ServiceProviderService;
 use App\Interfaces\AuthInterface;
 use App\Models\User;
 use App\DataTables\UsersDataTable;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -29,13 +30,6 @@ class UserController extends Controller
         $this->authService = $authService;
         $this->authInterface = $authInterface;
         $this->dataTable = $dataTable;
-    }
-
-    public function register(CreateUserRequest $request)
-    {
-        $this->userService->store($request->all());
-        return response()->json(["message" => "success"])
-        ->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function login(LoginRequest $request, ServerRequestInterface $auth)
@@ -69,5 +63,28 @@ class UserController extends Controller
     {
         return $this->dataTable->render('users.index');
     }
-    
+
+    public function show(User $user)
+    {
+        return new UserResource($user);
+    }
+
+    public function store(CreateUserRequest $request)
+    {
+        $this->userService->store($request->all());
+        return response()->json(["message" => "success"])
+        ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $this->userService->update($request->all(), $user);
+        return response()->json(["message" => "success"]);
+    }
+
+    public function destroy(User $user)
+    {
+        $this->userService->delete($user);
+        return response()->json(["message" => "success"]);
+    }
 }

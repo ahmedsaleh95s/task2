@@ -21,6 +21,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'remember_token',
+        'role_id'
     ];
 
     protected $hidden = [
@@ -47,5 +48,10 @@ class User extends Authenticatable
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

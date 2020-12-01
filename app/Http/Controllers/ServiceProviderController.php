@@ -29,6 +29,7 @@ class ServiceProviderController extends Controller
 
     public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService, AuthInterface $authInterface, ServiceProvidersDataTable $dataTable)
     {
+        $this->authorizeResource(ServiceProvider::class, 'serviceProvider');
         $this->serviceProviderService = $serviceProviderService;
         $this->authService = $authService;
         $this->authInterface = $authInterface;
