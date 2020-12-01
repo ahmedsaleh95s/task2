@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\IntervalsDataTable;
 use App\DataTables\ServiceProvidersDataTable;
 use App\Enums\ReservationStatus;
 use App\Http\Requests\ServiceProviderLoginRequest;
@@ -25,15 +26,14 @@ use Yajra\DataTables\CollectionDataTable;
 class ServiceProviderController extends Controller
 {
     //
-    private $serviceProviderService, $authService, $authInterface, $dataTable;
+    private $serviceProviderService, $authService, $authInterface;
 
-    public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService, AuthInterface $authInterface, ServiceProvidersDataTable $dataTable)
+    public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService, AuthInterface $authInterface)
     {
         $this->authorizeResource(ServiceProvider::class, 'serviceProvider');
         $this->serviceProviderService = $serviceProviderService;
         $this->authService = $authService;
         $this->authInterface = $authInterface;
-        $this->dataTable = $dataTable;
     }
 
     public function store(StoreServiceProviderRequest $request)
@@ -43,14 +43,17 @@ class ServiceProviderController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function index()
+    public function index(ServiceProvidersDataTable $dataTable)
     {
-        $serviceProviders = $this->serviceProviderService->all();
-        return Datatables::of(ServiceProviderResource::collection($serviceProviders))
-            ->make(true);
+        return $dataTable->render('service-providers.index');
     }
 
     public function show(ServiceProvider $serviceProvider)
+    {
+        return new ServiceProviderResource($serviceProvider);
+    }
+
+    public function intervals(ServiceProvider $serviceProvider, IntervalsDataTable $dataTable)
     {
         if (request()->ajax()) {
             $collection = $serviceProvider->getIntervals();
@@ -60,7 +63,7 @@ class ServiceProviderController extends Controller
                 })
                 ->toJson();
         }
-        return $this->dataTable->render('service-providers.details');
+        return $dataTable->render('service-providers.details');
     }
 
     public function update(UpdateServiceProviderRequest $request, ServiceProvider $serviceProvider)

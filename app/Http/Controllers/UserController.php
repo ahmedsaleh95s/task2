@@ -23,13 +23,12 @@ use App\Http\Requests\UpdateUserRequest;
 class UserController extends Controller
 {
     //
-    private $authService, $userService, $authInterface, $dataTable;
+    private $authService, $userService, $authInterface;
 
-    public function __construct( UserService $userService, AuthService $authService, AuthInterface $authInterface, UsersDataTable $dataTable) {
+    public function __construct( UserService $userService, AuthService $authService, AuthInterface $authInterface) {
         $this->userService = $userService;
         $this->authService = $authService;
         $this->authInterface = $authInterface;
-        $this->dataTable = $dataTable;
     }
 
     public function login(LoginRequest $request, ServerRequestInterface $auth)
@@ -59,9 +58,9 @@ class UserController extends Controller
         ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function index()
+    public function index(UsersDataTable $dataTable)
     {
-        return $this->dataTable->render('users.index');
+        return $dataTable->render('users.index');
     }
 
     public function show(User $user)

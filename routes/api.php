@@ -12,6 +12,16 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('forget-password', 'UserController@forgetPassword')->name('forget-password');
     Route::post('reset-password', 'UserController@resetPassword')->name('reset-password');
 
+    Route::resource('user-service-providers', 'ServiceProviderController', [
+        'names' => [
+            'index' => 'user-all-service-provider',
+            'store' => 'user-store-service-provider',
+            'show' => 'user-show-service-provider',
+            'update' => 'user-update-service-provider',
+            'destroy' => 'user-delete-service-provider',
+        ]
+    ]);
+
     Route::middleware('auth:api')->group(function ()
     {
         Route::prefix('users')->group(function (){
@@ -21,15 +31,15 @@ Route::namespace('App\Http\Controllers')->group(function () {
             Route::get('/distance', 'ServiceProviderController@distance')->name('user-distance');
         });
 
-        Route::resource('user-service-providers', 'ServiceProviderController', [
-            'names' => [
-                'index' => 'user-all-service-provider',
-                'store' => 'user-store-service-provider',
-                'show' => 'user-show-service-provider',
-                'update' => 'user-update-service-provider',
-                'destroy' => 'user-delete-service-provider',
-            ]
-        ]);
+        // Route::resource('user-service-providers', 'ServiceProviderController', [
+        //     'names' => [
+        //         'index' => 'user-all-service-provider',
+        //         'store' => 'user-store-service-provider',
+        //         'show' => 'user-show-service-provider',
+        //         'update' => 'user-update-service-provider',
+        //         'destroy' => 'user-delete-service-provider',
+        //     ]
+        // ]);
     });
 
     Route::middleware('auth:admin')->group(function ()

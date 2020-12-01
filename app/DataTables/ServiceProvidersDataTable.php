@@ -20,8 +20,7 @@ class ServiceProvidersDataTable extends DataTable
     public function dataTable($query)
     {
         return datatables()
-            ->eloquent($query)
-            ->addColumn('action', 'serviceproviders.action');
+            ->eloquent($query);
     }
 
     /**
@@ -47,14 +46,7 @@ class ServiceProvidersDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+                    ->orderBy(1);
     }
 
     /**
@@ -65,15 +57,12 @@ class ServiceProvidersDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('from')->addClass('from'),
-            Column::make('to')->addClass('to'),
-            Column::make('day'),
-            Column::make('reserved'),
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center')
+            Column::make('name_ar'),
+            Column::make('name_en'),
+            Column::make('phone'),
+            Column::make('email'),
+            Column::make('price'),
+            Column::make('allowed_time'),
         ];
     }
 

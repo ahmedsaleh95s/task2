@@ -42,7 +42,7 @@ $('.login-btn').click(function (e) {
             $(".success-alert-login").fadeOut(3000);
             localStorage.setItem("user", JSON.stringify(data.user));
             localStorage.setItem("tokenUser", JSON.stringify(data.token.access_token));
-            window.location.replace("/admin/login");
+            window.location.replace('/service-provider/location');
         },
         error: function (xhr) {
             var errors = xhr.responseJSON.errors;
