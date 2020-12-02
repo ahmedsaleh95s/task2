@@ -26,7 +26,7 @@ class ServiceProviderService
     public function uploadAvatar($image)
     {
         if (!empty($image)) {
-            $link = $this->uploadFile($image, "serviceProviders");
+            $link = $this->saveImage($image, "serviceProviders");
             $this->saveAvatar($link);
         }
     }

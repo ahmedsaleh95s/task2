@@ -16,6 +16,7 @@ class AdminSeeder extends Seeder
     public function run()
     {
         //
-        Admin::factory()->create();
+        $admin = Admin::factory()->create();
+        $admin->assignRole('SuperAdmin');
     }
 }

@@ -14,12 +14,7 @@ class ServiceProviderPolicy
 
     public function before($user, $ability)
     {
-        if ($user instanceof Admin) {
-            return true;
-        } elseif ($user instanceof User && $role = $user->role()->first()) {
-            return $role->name == RoleType::SUPER_ADMIN;
-        }
-        return false;
+        return $user->hasRole('SuperAdmin');
     }
 
     /**

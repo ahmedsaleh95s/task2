@@ -12,16 +12,6 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('forget-password', 'UserController@forgetPassword')->name('forget-password');
     Route::post('reset-password', 'UserController@resetPassword')->name('reset-password');
 
-    Route::resource('user-service-providers', 'ServiceProviderController', [
-        'names' => [
-            'index' => 'user-all-service-provider',
-            'store' => 'user-store-service-provider',
-            'show' => 'user-show-service-provider',
-            'update' => 'user-update-service-provider',
-            'destroy' => 'user-delete-service-provider',
-        ]
-    ]);
-
     Route::middleware('auth:api')->group(function ()
     {
         Route::prefix('users')->group(function (){
@@ -30,16 +20,6 @@ Route::namespace('App\Http\Controllers')->group(function () {
         Route::prefix('service-provider')->group(function (){
             Route::get('/distance', 'ServiceProviderController@distance')->name('user-distance');
         });
-
-        // Route::resource('user-service-providers', 'ServiceProviderController', [
-        //     'names' => [
-        //         'index' => 'user-all-service-provider',
-        //         'store' => 'user-store-service-provider',
-        //         'show' => 'user-show-service-provider',
-        //         'update' => 'user-update-service-provider',
-        //         'destroy' => 'user-delete-service-provider',
-        //     ]
-        // ]);
     });
 
     Route::middleware('auth:admin')->group(function ()
@@ -53,13 +33,13 @@ Route::namespace('App\Http\Controllers')->group(function () {
                 'destroy' => 'admin-delete-user',
             ]
         ]);
-        Route::resource('admin-service-providers', 'ServiceProviderController', [
+        Route::resource('service-providers', 'ServiceProviderController', [
             'names' => [
-                'index' => 'admin-all-service-provider',
-                'store' => 'admin-store-service-provider',
-                'show' => 'admin-show-service-provider',
-                'update' => 'admin-update-service-provider',
-                'destroy' => 'admin-delete-service-provider',
+                'index' => 'all-service-provider',
+                'store' => 'store-service-provider',
+                'show' => 'show-service-provider',
+                'update' => 'update-service-provider',
+                'destroy' => 'delete-service-provider',
             ]
         ]);
         
