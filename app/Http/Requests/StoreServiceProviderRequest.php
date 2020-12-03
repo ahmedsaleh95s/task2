@@ -36,7 +36,7 @@ class StoreServiceProviderRequest extends FormRequest
             'email' => 'required|email|unique:service_providers',
             'lat' => ['required','regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'], 
             'long' => ['required','regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-            'avatar' => 'required|image|mimes:jpeg,bmp,png',
+            'avatar' => 'required|image|mimes:jpeg,bmp,png,jpg',
             'files' => 'required|array',
             'files.*' => 'required|file',
             'Categories' => 'required|array',

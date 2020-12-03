@@ -30,10 +30,10 @@ class ServiceProviderController extends Controller
 
     public function __construct(ServiceProviderService $serviceProviderService, AuthService $authService, AuthInterface $authInterface)
     {
-        $this->authorizeResource(ServiceProvider::class, 'serviceProvider');
         $this->serviceProviderService = $serviceProviderService;
         $this->authService = $authService;
         $this->authInterface = $authInterface;
+        $this->authorizeResource(ServiceProvider::class, 'service_provider');
     }
 
     public function store(StoreServiceProviderRequest $request)
@@ -43,9 +43,10 @@ class ServiceProviderController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function index(ServiceProvidersDataTable $dataTable)
+    public function index()
     {
-        return $dataTable->render('service-providers.index');
+        $serviceProviders = $this->serviceProviderService->all();
+        return ServiceProviderResource::collection($serviceProviders);
     }
 
     public function show(ServiceProvider $serviceProvider)
@@ -66,15 +67,15 @@ class ServiceProviderController extends Controller
         return $dataTable->render('service-providers.details');
     }
 
-    public function update(UpdateServiceProviderRequest $request, ServiceProvider $serviceProvider)
+    public function update(UpdateServiceProviderRequest $request, ServiceProvider $service_provider)
     {
-        $this->serviceProviderService->update($request->all(), $serviceProvider);
+        $this->serviceProviderService->update($request->all(), $service_provider);
         return response()->json(["message" => "success"]);
     }
 
-    public function destroy(ServiceProvider $serviceProvider)
+    public function destroy(ServiceProvider $service_provider)
     {
-        $this->serviceProviderService->delete($serviceProvider);
+        $this->serviceProviderService->delete($service_provider);
         return response()->json(["message" => "success"]);
     }
 

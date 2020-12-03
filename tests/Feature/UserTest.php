@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reservation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -80,5 +81,23 @@ class UserTest extends TestCase
         $response = $this->json('POST', route('reset-password'), $data);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertSee("message");
+    }
+
+    /** @test */
+    public function reserve_interval_successfully()
+    {
+        $this->actingAs(User::first(), 'api');
+        $data = Reservation::factory()->raw();
+        $response = $this->json('POST', route('user-reservation', ['serviceProvider' => 2]), $data);
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
+    public function failed_to_reserve_interval()
+    {
+        $this->actingAs(User::first(), 'api');
+        $data = Reservation::factory()->raw(['to' => '2020-12-13 04:00 pm']);
+        $response = $this->json('POST', route('user-reservation', ['serviceProvider' => 5]), $data);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

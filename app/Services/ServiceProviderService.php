@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Repositories\ServiceProviderRepositories;
 use App\Traits\FileTrait;
+// use ImageOptimizer;
+use Illuminate\Support\Facades\Storage;
+use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 class ServiceProviderService
 {
@@ -26,7 +29,9 @@ class ServiceProviderService
     public function uploadAvatar($image)
     {
         if (!empty($image)) {
-            $link = $this->saveImage($image, "serviceProviders");
+            $link = $this->uploadFile($image, "serviceProviders");
+            $path = Storage::path($link);
+            ImageOptimizer::optimize($path, 's.jpg');
             $this->saveAvatar($link);
         }
     }

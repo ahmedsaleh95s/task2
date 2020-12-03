@@ -29,7 +29,7 @@ class CreateUserRequest extends FormRequest
             'email' => 'required|email:rfc,dns|unique:users',
             'phone' => ['required','unique:users','regex:/^(0|\+)?(966|5|)(\d{9})$/'],
             'password' => 'required|min:8',
-            'photo' => 'required|image|mimes:jpeg,bmp,png',
+            'photo' => 'required|image|mimes:jpeg,bmp,png,jpg',
         ];
     }
 }

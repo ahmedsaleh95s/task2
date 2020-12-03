@@ -12,6 +12,7 @@ use Illuminate\Http\UploadedFile;
 use App\Models\Admin;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Models\Category;
+use Database\Factories\LocationFactory;
 
 class ServiceProviderTest extends TestCase
 {
@@ -26,7 +27,7 @@ class ServiceProviderTest extends TestCase
         $this->data['avatar'] = $file;
         $file = UploadedFile::fake()->image('serviceProviders.pdf');
         $this->data['files'][] = $file;
-        Admin::factory()->create();
+        $admin = Admin::factory()->create();
         Category::factory(5)->create();
         $this->actingAs(Admin::first(), 'admin');
     }
@@ -49,21 +50,21 @@ class ServiceProviderTest extends TestCase
     // /** @test */
     public function show_Service_provider_data()
     {
-        $response = $this->json('GET', route('show-service-provider', ['id' => 1]));
+        $response = $this->json('GET', route('show-service-provider', ['service_provider' => 2]));
         $response->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
     public function update_Service_provider_data()
     {
-        $response = $this->json('POST', route('update-service-provider', ['id' => 1]), $this->data);
+        $response = $this->json('PUT', route('update-service-provider', ['service_provider' => 2]), $this->data);
         $response->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
     public function delete_Service_provider_data()
     {
-        $response = $this->json('DELETE', route('delete-service-provider', ['id' => 3]));
+        $response = $this->json('DELETE', route('delete-service-provider', ['service_provider' => 4]));
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -71,8 +72,15 @@ class ServiceProviderTest extends TestCase
     public function login_Service_provider_successfully()
     {
         $data['email'] = ServiceProvider::first()->email;
-        $data['password'] = '123456789';
+        $data['password'] = '12345678';
         $response = $this->json('POST', route('service-provider-login'), $data);
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
+    public function list_Service_provider_by_location()
+    {
+        $response = $this->json('GET', route('user-distance', ['lat' => 28.302938, 'long' => 57.718758]));
         $response->assertStatus(Response::HTTP_OK);
     }
 }

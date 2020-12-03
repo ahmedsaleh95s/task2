@@ -39,4 +39,13 @@ class AdminTest extends TestCase
         $response = $this->json('POST', route('admin-login'), $data);
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
+
+    /** @test */
+    public function set_admin_commission_successfully()
+    {
+        $this->actingAs(Admin::first(), 'admin');
+        $data['commission'] = 2.5;
+        $response = $this->json('POST', route('admin-commission'), $data);
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
 }

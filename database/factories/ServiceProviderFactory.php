@@ -41,12 +41,14 @@ class ServiceProviderFactory extends Factory
             ],
             'working_hours' => [
                 [
-                    "from" => '03:00 pm',
-                    'to' => '04:00 pm',
+                    "from" => '03:00 PM',
+                    'to' => '04:00 PM',
                     "day" => 1
                 ]
             ],
-            'password' => '12345678'
+            'password' => '12345678',
+            'allowed_time' => 30,
+            'price' => 100
         ];
     }
 }
