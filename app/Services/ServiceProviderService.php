@@ -31,7 +31,7 @@ class ServiceProviderService
         if (!empty($image)) {
             $link = $this->uploadFile($image, "serviceProviders");
             $path = Storage::path($link);
-            ImageOptimizer::optimize($path, 's.jpg');
+            ImageOptimizer::optimize($path);
             $this->saveAvatar($link);
         }
     }
