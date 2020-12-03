@@ -12,6 +12,12 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('forget-password', 'UserController@forgetPassword')->name('forget-password');
     Route::post('reset-password', 'UserController@resetPassword')->name('reset-password');
 
+    Route::prefix('fb')->group(function () {
+        Route::get('/', 'FirebaseController@all');
+        Route::post('/', 'FirebaseController@store');
+        Route::put('/', 'FirebaseController@update');
+        Route::delete('/', 'FirebaseController@delete');
+    });
     Route::middleware('auth:api')->group(function ()
     {
         Route::prefix('users')->group(function (){
@@ -40,6 +46,16 @@ Route::namespace('App\Http\Controllers')->group(function () {
                 'show' => 'show-service-provider',
                 'update' => 'update-service-provider',
                 'destroy' => 'delete-service-provider',
+            ]
+        ]);
+
+        Route::resource('firebase', 'FirebaseController', [
+            'names' => [
+                'index' => 'all-nodes',
+                'store' => 'store-node',
+                'show' => 'show-node',
+                'update' => 'update-node',
+                'destroy' => 'delete-node',
             ]
         ]);
         
