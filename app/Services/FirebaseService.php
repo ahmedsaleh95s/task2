@@ -2,34 +2,44 @@
 
 namespace App\Services;
 
-use App\Repositories\FirebaseRepositories;
 use Symfony\Component\HttpFoundation\Response;
+use Kreait\Firebase\Database;
 
 class FirebaseService
 {
-    private $firebaseRepositories;
-    public function __construct(FirebaseRepositories $firebaseRepositories)
+    private $database;
+
+    public function __construct(Database $database)
     {
-        $this->firebaseRepositories = $firebaseRepositories;
+        $this->database = $database;
     }
 
     public function all()
     {
-        return $this->firebaseRepositories->all();   
+        $reference = $this->database->getReference();
+        return  $reference->getValue();
+    }
+
+    public function show($key)
+    {
+        $reference = $this->database->getReference($key);
+        return  $reference->getValue();
     }
 
     public function store($data)
     {
-        $this->firebaseRepositories->store($data);
+        $this->database->getReference($data['name'])->set($data['value']);
     }
 
     public function update($data, $node)
     {
-        $this->firebaseRepositories->update($data, $node);
+        $updates = [$node => $data];
+        $this->database->getReference() // this is the root reference
+            ->update($updates);
     }
 
     public function destroy($node)
     {
-        $this->firebaseRepositories->destroy($node);
+        $this->database->getReference($node)->remove();
     }
 }

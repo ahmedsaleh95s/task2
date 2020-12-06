@@ -18,7 +18,7 @@ class ServiceProvider extends Authenticatable
 {
     use HasFactory, SoftDeletes, SpatialTrait, HasApiTokens;
 
-    protected $with = ['workingHours','categories'];
+    protected $with = ['workingHours','categories','image','files'];
     protected $fillable = [
         'name_ar','name_en','phone','email','area','location','password','price','allowed_time'
     ];

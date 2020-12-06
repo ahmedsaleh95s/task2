@@ -12,18 +12,27 @@ class ServiceProviderService
 {
 
     use FileTrait;
-    private $serviceProviderRepo;
+    private $serviceProviderRepo, $firebaseService;
 
-    public function __construct(ServiceProviderRepositories $serviceProviderRepo)
+    public function __construct(ServiceProviderRepositories $serviceProviderRepo, FirebaseService $firebaseService)
     {
         $this->serviceProviderRepo = $serviceProviderRepo;
+        $this->firebaseService = $firebaseService;
     }
 
     public function store($data)
     {
-        $this->serviceProviderRepo->store($data);
+        $serviceProvider = $this->serviceProviderRepo->store($data);
         $this->uploadAvatar($data['avatar']);
         $this->uploadFiles($data['files']);
+        $this->storeRealtimeDatabase($serviceProvider);
+    }
+
+    public function storeRealtimeDatabase($serviceProvider)
+    {
+        $data['name'] = $serviceProvider->id;
+        $data['value'] = $serviceProvider;
+        $this->firebaseService->store($data);
     }
 
     public function uploadAvatar($image)
@@ -68,12 +77,20 @@ class ServiceProviderService
 
     public function update($data, $serviceProvider)
     {
-        $this->serviceProviderRepo->update($data, $serviceProvider);
+        $data = $this->serviceProviderRepo->update($data, $serviceProvider);
+
+        $this->UpdateRealtimeDatabase($serviceProvider, $serviceProvider->id);
+    }
+
+    public function UpdateRealtimeDatabase($data, $node)
+    {
+        $this->firebaseService->update($data, $node);
     }
 
     public function delete($serviceProvider)
     {
         $this->serviceProviderRepo->delete($serviceProvider);
+        $this->firebaseService->destroy($serviceProvider->id);
     }
 
     public function distance($data)

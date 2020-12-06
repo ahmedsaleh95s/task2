@@ -26,6 +26,7 @@ class ServiceProviderRepositories implements AuthInterface
         $this->serviceProvider = $this->serviceProvider->create($data);
         $this->serviceProvider->categories()->attach($data['Categories']);
         $this->serviceProvider->workingHours()->createMany($data['working_hours']);
+        return $this->serviceProvider;;
     }
 
     public function saveAvatar($link)
@@ -65,6 +66,7 @@ class ServiceProviderRepositories implements AuthInterface
         $serviceProvider->categories()->sync($data['Categories']);
         $serviceProvider->workingHours()->delete(); // sync
         $serviceProvider->workingHours()->createMany($data['working_hours']);
+        return $serviceProvider;
     }
 
     public function delete($serviceProvider)

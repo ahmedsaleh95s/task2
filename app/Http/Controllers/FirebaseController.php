@@ -23,6 +23,11 @@ class FirebaseController extends Controller
         return $nodes = $this->firebaseService->all();
     }
 
+    public function show($key)
+    {
+        return $this->firebaseService->show($key);
+    }
+
     public function store(StoreFirebaseNodeRequest $request)
     {
         $this->firebaseService->store($request->all());

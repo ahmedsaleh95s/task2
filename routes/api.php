@@ -25,34 +25,9 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
     Route::middleware('auth:admin')->group(function ()
     {
-        Route::resource('users', 'UserController', [
-            'names' => [
-                'index' => 'admin-all-users',
-                'store' => 'admin-store-users',
-                'show' => 'admin-show-user',
-                'update' => 'admin-update-user',
-                'destroy' => 'admin-delete-user',
-            ]
-        ]);
-        Route::resource('service-providers', 'ServiceProviderController', [
-            'names' => [
-                'index' => 'all-service-provider',
-                'store' => 'store-service-provider',
-                'show' => 'show-service-provider',
-                'update' => 'update-service-provider',
-                'destroy' => 'delete-service-provider',
-            ],
-        ]);
-
-        Route::resource('firebase', 'FirebaseController', [
-            'names' => [
-                'index' => 'all-nodes',
-                'store' => 'store-node',
-                'show' => 'show-node',
-                'update' => 'update-node',
-                'destroy' => 'delete-node',
-            ]
-        ]);
+        Route::resource('users', 'UserController');
+        Route::resource('service-providers', 'ServiceProviderController');
+        Route::resource('firebase', 'FirebaseController');
         
         Route::prefix('admin')->group(function (){
             Route::post('commission', 'AdminController@commission')->name('admin-commission');            
