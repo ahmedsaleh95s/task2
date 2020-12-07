@@ -16,4 +16,9 @@ class AdminService
     {
         $this->adminRepo->commission($data);
     }
+
+    public function fcm($data)
+    {
+        $this->adminRepo->fcm($data);
+    }
 }

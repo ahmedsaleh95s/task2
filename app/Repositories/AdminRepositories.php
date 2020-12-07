@@ -38,4 +38,9 @@ class AdminRepositories implements AuthInterface
     {
         return $this->admin->whereNotNull('fcm_token')->pluck('fcm_token');
     }
+
+    public function fcm($data)
+    {
+        auth()->user()->fcms()->create($data);
+    }
 }

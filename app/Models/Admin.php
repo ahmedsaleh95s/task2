@@ -26,4 +26,9 @@ class Admin extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($value);
     }
+
+    public function fcms()
+    {
+        return $this->morphMany(FcmToken::class, 'tokenable');
+    }
 }

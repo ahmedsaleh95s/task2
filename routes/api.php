@@ -25,9 +25,11 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
     Route::middleware('auth:admin')->group(function ()
     {
+        Route::prefix('admin')->group(function (){
+            Route::post('fcm', 'AdminController@fcm')->name('admin-fcm');
+        });
         Route::resource('users', 'UserController');
         Route::resource('service-providers', 'ServiceProviderController');
-        Route::resource('firebase', 'FirebaseController');
         
         Route::prefix('admin')->group(function (){
             Route::post('commission', 'AdminController@commission')->name('admin-commission');            

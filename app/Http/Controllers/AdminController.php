@@ -6,6 +6,7 @@ use App\Http\Resources\AdminResource;
 use App\Http\Resources\TokenResource;
 use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\StoreAdminCommisionRequest;
+use App\Http\Requests\StoreFcmTokenRequest;
 use App\Interfaces\AuthInterface;
 use App\Services\AdminService;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,5 +37,11 @@ class AdminController extends Controller
         $this->adminService->commission($request->all());
         return response()->json(["message" => "success"])
         ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function fcm(StoreFcmTokenRequest $request)
+    {
+        $this->adminService->fcm($request->all());
+        return response()->json(["message" => "success"]);
     }
 }
