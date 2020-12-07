@@ -7,6 +7,8 @@ use App\Traits\FileTrait;
 // use ImageOptimizer;
 use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
+use Kreait\Firebase\Messaging\CloudMessage;
+use App\Repositories\AdminRepositories;
 
 class ServiceProviderService
 {
@@ -26,6 +28,15 @@ class ServiceProviderService
         $this->uploadAvatar($data['avatar']);
         $this->uploadFiles($data['files']);
         $this->storeRealtimeDatabase($serviceProvider);
+        $this->sendNotification();
+    }
+
+    public function sendNotification()
+    {
+        $messaging = app('firebase.messaging');
+        $deviceTokens = app(AdminRepositories::class)->tokens();
+        $message = CloudMessage::new();
+        $messaging->sendMulticast($message, $deviceTokens->toArray());
     }
 
     public function storeRealtimeDatabase($serviceProvider)
@@ -97,5 +108,4 @@ class ServiceProviderService
     {
         return $this->serviceProviderRepo->distance($data);
     }
-    
 }

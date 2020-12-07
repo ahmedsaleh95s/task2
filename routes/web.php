@@ -24,3 +24,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
         Route::get('/{serviceProvider}', 'ServiceProviderController@show');
     });
 });
+
+Route::get('fire', function () {
+    return view('firebase.auth');
+});
