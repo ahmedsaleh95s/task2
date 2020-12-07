@@ -26,11 +26,6 @@ class FirebaseService
         return  $reference->getValue();
     }
 
-    public function store($data)
-    {
-        $this->database->getReference($data['name'])->set($data['value']);
-    }
-
     public function update($data, $node)
     {
         $updates = [$node => $data];

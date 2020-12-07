@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
+use App\Events\FirebaseEvent;
 use App\Repositories\ServiceProviderRepositories;
 use App\Traits\FileTrait;
 // use ImageOptimizer;
 use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
-use Kreait\Firebase\Messaging\CloudMessage;
 use App\Repositories\AdminRepositories;
 
 class ServiceProviderService
@@ -27,23 +27,7 @@ class ServiceProviderService
         $serviceProvider = $this->serviceProviderRepo->store($data);
         $this->uploadAvatar($data['avatar']);
         $this->uploadFiles($data['files']);
-        $this->storeRealtimeDatabase($serviceProvider);
-        $this->sendNotification();
-    }
-
-    public function sendNotification()
-    {
-        $messaging = app('firebase.messaging');
-        $deviceTokens = app(AdminRepositories::class)->tokens();
-        $message = CloudMessage::new();
-        $messaging->sendMulticast($message, $deviceTokens->toArray());
-    }
-
-    public function storeRealtimeDatabase($serviceProvider)
-    {
-        $data['name'] = $serviceProvider->id;
-        $data['value'] = $serviceProvider;
-        $this->firebaseService->store($data);
+        FirebaseEvent::dispatch($serviceProvider);
     }
 
     public function uploadAvatar($image)
