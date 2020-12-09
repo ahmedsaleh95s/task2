@@ -74,6 +74,8 @@ class FcmListener implements ShouldQueue
             $messaging = app('firebase.messaging');
             $message = CloudMessage::new();
             $messaging->sendMulticast($message, $deviceTokens->toArray());
+            $result = $messaging->subscribeToTopic('Firebase', $deviceTokens->toArray());
+            Log::info($result);
         }
     }
 }
