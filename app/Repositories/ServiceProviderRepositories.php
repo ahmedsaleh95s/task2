@@ -26,7 +26,6 @@ class ServiceProviderRepositories implements AuthInterface
         $this->serviceProvider = $this->serviceProvider->create($data);
         $this->serviceProvider->categories()->attach($data['Categories']);
         $this->serviceProvider->workingHours()->createMany($data['working_hours']);
-        return $this->serviceProvider;;
     }
 
     public function saveAvatar($link)

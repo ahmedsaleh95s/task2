@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Enums\ReservationStatus;
+use App\Events\DeleteFirebaseEvent;
+use App\Events\StoreFirebaseEvent;
+use App\Events\UpdateFirebaseEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,6 +32,12 @@ class ServiceProvider extends Authenticatable
 
     protected $hidden = [
         'password',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => StoreFirebaseEvent::class,
+        'updated' => UpdateFirebaseEvent::class,
+        'deleted' => DeleteFirebaseEvent::class,
     ];
 
     public function setPasswordAttribute($value)

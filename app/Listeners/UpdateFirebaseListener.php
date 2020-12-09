@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\StoreFirebaseEvent;
+use App\Events\UpdateFirebaseEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Kreait\Firebase\Database;
 
-class StoreFirebaseListener implements ShouldQueue
+class UpdateFirebaseListener implements ShouldQueue
 {
     private $database;
     /**
@@ -24,12 +24,14 @@ class StoreFirebaseListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  FirebaseEvent  $event
+     * @param  UpdateFirebaseEvent  $event
      * @return void
      */
-    public function handle(StoreFirebaseEvent $event)
+    public function handle(UpdateFirebaseEvent $event)
     {
         //
-        $this->database->getReference($event->serviceProvider->id)->set($event->serviceProvider);
+        $updates = [$event->serviceProvider->id => $event->serviceProvider];
+        $this->database->getReference() // this is the root reference
+            ->update($updates);
     }
 }

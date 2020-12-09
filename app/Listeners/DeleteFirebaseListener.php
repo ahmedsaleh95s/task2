@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\StoreFirebaseEvent;
+use App\Events\DeleteFirebaseEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Kreait\Firebase\Database;
 
-class StoreFirebaseListener implements ShouldQueue
+class DeleteFirebaseListener implements ShouldQueue
 {
     private $database;
     /**
@@ -24,12 +24,12 @@ class StoreFirebaseListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  FirebaseEvent  $event
+     * @param  DeleteFirebaseEvent  $event
      * @return void
      */
-    public function handle(StoreFirebaseEvent $event)
+    public function handle(DeleteFirebaseEvent $event)
     {
         //
-        $this->database->getReference($event->serviceProvider->id)->set($event->serviceProvider);
+        $this->database->getReference($event->serviceProvider->id)->remove();
     }
 }

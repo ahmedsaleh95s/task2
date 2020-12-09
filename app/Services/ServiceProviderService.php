@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Events\FirebaseEvent;
+use App\Events\StoreFirebaseEvent;
 use App\Repositories\ServiceProviderRepositories;
 use App\Traits\FileTrait;
 // use ImageOptimizer;
@@ -14,20 +14,18 @@ class ServiceProviderService
 {
 
     use FileTrait;
-    private $serviceProviderRepo, $firebaseService;
+    private $serviceProviderRepo;
 
-    public function __construct(ServiceProviderRepositories $serviceProviderRepo, FirebaseService $firebaseService)
+    public function __construct(ServiceProviderRepositories $serviceProviderRepo)
     {
         $this->serviceProviderRepo = $serviceProviderRepo;
-        $this->firebaseService = $firebaseService;
     }
 
     public function store($data)
     {
-        $serviceProvider = $this->serviceProviderRepo->store($data);
+        $this->serviceProviderRepo->store($data);
         $this->uploadAvatar($data['avatar']);
         $this->uploadFiles($data['files']);
-        FirebaseEvent::dispatch($serviceProvider);
     }
 
     public function uploadAvatar($image)
@@ -73,19 +71,11 @@ class ServiceProviderService
     public function update($data, $serviceProvider)
     {
         $data = $this->serviceProviderRepo->update($data, $serviceProvider);
-
-        $this->UpdateRealtimeDatabase($serviceProvider, $serviceProvider->id);
-    }
-
-    public function UpdateRealtimeDatabase($data, $node)
-    {
-        $this->firebaseService->update($data, $node);
     }
 
     public function delete($serviceProvider)
     {
         $this->serviceProviderRepo->delete($serviceProvider);
-        $this->firebaseService->destroy($serviceProvider->id);
     }
 
     public function distance($data)

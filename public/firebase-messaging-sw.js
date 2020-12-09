@@ -27,7 +27,6 @@ messaging.onBackgroundMessage(function (payload) {
     body: 'Background Message body.',
     icon: '/firebase-logo.png'
   };
-  alert()
   self.registration.showNotification(notificationTitle,
     notificationOptions);
 });
