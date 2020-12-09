@@ -19,6 +19,9 @@ class AdminService
 
     public function fcm($data)
     {
+
         $this->adminRepo->fcm($data);
+        $messaging = app('firebase.messaging');
+        $messaging->subscribeToTopic('Firebase', $data['fcm_token']);
     }
 }
