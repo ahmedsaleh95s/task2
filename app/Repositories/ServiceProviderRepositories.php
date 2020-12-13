@@ -4,15 +4,10 @@ namespace App\Repositories;
 
 use App\Interfaces\AuthInterface;
 use App\Models\ServiceProvider;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
-use Grimzy\LaravelMysqlSpatial\Types\Polygon;
-use Grimzy\LaravelMysqlSpatial\Types\LineString;
 use App\Enums\ProviderType;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class ServiceProviderRepositories implements AuthInterface
 {
-    use SpatialTrait;
     public $serviceProvider;
 
     public function __construct(ServiceProvider $serviceProvider)
@@ -40,11 +35,14 @@ class ServiceProviderRepositories implements AuthInterface
 
     public function handlePlaces($data)
     {
-        $data['location'] = new Point($data['lat'], $data['long']);
+        $data['location'] = ['type' => "Point", 'coordinates' => [$data['long'], $data['lat']]];
         foreach ($data['Area_polygon'] as $point) {
-            $points[] = new Point($point[0], $point[1]);
+            $points[] = [$point[1], $point[0]];
         }
-        $data['area'] = new Polygon([new LineString($points)]);
+        $data['area'] = [
+            'type' => "Polygon",
+            'coordinates' =>  [$points]
+        ];
         return $data;
     }
 
@@ -87,11 +85,14 @@ class ServiceProviderRepositories implements AuthInterface
 
     public function distance($data)
     {
-        $geometry = new Point($data['lat'], $data['long']);
         return $this->serviceProvider
-        ->contains('area', $geometry)
-        ->orderByDistance('area',$geometry)
-        ->get();
+            ->where('area', 'geoIntersects', [
+                '$geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => 
+                        [(double)$data['long'], (double)$data['lat']],
+                ],
+            ])->get();
     }
 
     public function workingHoursByColumn($serviceProvider, $column, $value)

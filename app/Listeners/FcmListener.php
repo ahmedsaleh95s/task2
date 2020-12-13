@@ -2,9 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\DeleteFirebaseEvent;
-use App\Events\StoreFirebaseEvent;
-use App\Events\UpdateFirebaseEvent;
+use App\Events\FirebaseEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -23,49 +21,13 @@ class FcmListener implements ShouldQueue
         //
     }
 
-    public function handleStoreFirebaseEvent($event) {
-        $this->handle();
-    }
-
-    public function handleUpdateFirebaseEvent($event) {
-        $this->handle();
-    }
-
-    public function handleDeleteFirebaseEvent($event) {
-        $this->handle();
-    }
-
-    /**
-     * Register the listeners for the subscriber.
-     *
-     * @param  \Illuminate\Events\Dispatcher  $events
-     * @return void
-     */
-    public function subscribe($events)
-    {
-        $events->listen(
-            StoreFirebaseEvent::class,
-            [FcmListener::class, 'handleStoreFirebaseEvent']
-        );
-
-        $events->listen(
-            UpdateFirebaseEvent::class,
-            [FcmListener::class, 'handleUpdateFirebaseEvent']
-        );
-
-        $events->listen(
-            DeleteFirebaseEvent::class,
-            [FcmListener::class, 'handleDeleteFirebaseEvent']
-        );
-    }
-
     /**
      * Handle the event.
      *
      * @param  FirebaseEvent  $event
      * @return void
      */
-    public function handle()
+    public function handle($event)
     {
         //
         $deviceTokens = FcmToken::where('tokenable_type', 'App\Models\Admin')->pluck('fcm_token');

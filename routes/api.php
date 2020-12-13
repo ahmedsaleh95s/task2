@@ -13,15 +13,15 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('reset-password', 'UserController@resetPassword')->name('reset-password');
 
 
-    Route::middleware('auth:api')->group(function ()
-    {
+    // Route::middleware('auth:api')->group(function ()
+    // {
         Route::prefix('users')->group(function (){
             Route::post('/reservation/{serviceProvider}', 'UserController@reservation')->name('user-reservation');
         });
         Route::prefix('service-provider')->group(function (){
             Route::get('/distance', 'ServiceProviderController@distance')->name('user-distance');
         });
-    });
+    // });
 
     Route::middleware('auth:admin')->group(function ()
     {

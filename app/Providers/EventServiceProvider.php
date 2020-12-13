@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\DeleteFirebaseEvent;
+use App\Events\StoreFirebaseEvent;
+use App\Events\UpdateFirebaseEvent;
 use App\Listeners\FcmListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -19,6 +22,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        StoreFirebaseEvent::class => [
+            FcmListener::class
+        ],
+        UpdateFirebaseEvent::class => [
+            FcmListener::class
+        ],
+        DeleteFirebaseEvent::class => [
+            FcmListener::class
+        ]
     ];
 
     /**
@@ -35,8 +47,4 @@ class EventServiceProvider extends ServiceProvider
     {
         return true;
     }
-
-    protected $subscribe = [
-        FcmListener::class,
-    ];
 }

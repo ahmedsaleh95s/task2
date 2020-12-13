@@ -8,26 +8,17 @@ use App\Events\StoreFirebaseEvent;
 use App\Events\UpdateFirebaseEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
-use Grimzy\LaravelMysqlSpatial\Types\Polygon;
-use Grimzy\LaravelMysqlSpatial\Types\LineString;
 use Carbon\Carbon;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class ServiceProvider extends Authenticatable
 {
-    use HasFactory, SoftDeletes, SpatialTrait, HasApiTokens;
+    use HasFactory, SoftDeletes, HasApiTokens;
 
-    protected $with = ['workingHours','categories','image','files'];
     protected $fillable = [
         'name_ar','name_en','phone','email','area','location','password','price','allowed_time'
-    ];
-
-    protected $spatialFields = [
-        'location','area'
     ];
 
     protected $hidden = [

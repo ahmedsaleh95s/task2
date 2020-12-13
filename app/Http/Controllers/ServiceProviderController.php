@@ -33,7 +33,7 @@ class ServiceProviderController extends Controller
         $this->serviceProviderService = $serviceProviderService;
         $this->authService = $authService;
         $this->authInterface = $authInterface;
-        $this->authorizeResource(ServiceProvider::class, 'service_provider');
+        // $this->authorizeResource(ServiceProvider::class, 'service_provider');
     }
 
     public function store(StoreServiceProviderRequest $request)
@@ -45,8 +45,7 @@ class ServiceProviderController extends Controller
 
     public function index()
     {
-        $serviceProviders = $this->serviceProviderService->all();
-        return ServiceProviderResource::collection($serviceProviders);
+        return $this->serviceProviderService->all();
     }
 
     public function show(ServiceProvider $serviceProvider)
@@ -87,7 +86,7 @@ class ServiceProviderController extends Controller
 
     public function distance(GetServiceProviderRequest $request)
     {
-        $serviceProviders = $this->serviceProviderService->distance($request->all());
+        return $serviceProviders = $this->serviceProviderService->distance($request->all());
         return DataTables::of(ServiceProviderResource::collection($serviceProviders))->toJson();
     }
 }

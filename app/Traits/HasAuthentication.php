@@ -32,7 +32,7 @@ trait HasAuthentication
         private function getClientAuth($provider)
         {
                 return ($provider) ?  
-                Passport::client()->where('password_client', 1)->where('provider', $provider)->first():
-                Passport::client()->where('password_client', 1)->first() ;
+                Passport::client()->where('password_client', true)->where('provider', $provider)->first():
+                Passport::client()->where('password_client', true)->first() ;
         }
 }
