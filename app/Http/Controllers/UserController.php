@@ -18,6 +18,7 @@ use App\Services\ServiceProviderService;
 use App\Interfaces\AuthInterface;
 use App\Models\User;
 use App\DataTables\UsersDataTable;
+use App\Http\Requests\StoreFcmTokenRequest;
 use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
@@ -85,5 +86,12 @@ class UserController extends Controller
     {
         $this->userService->delete($user);
         return response()->json(["message" => "success"]);
+    }
+
+    public function fcm(StoreFcmTokenRequest $request)
+    {
+        $this->userService->fcm($request->all());
+        return response()->json(["message" => "success"])
+        ->setStatusCode(Response::HTTP_CREATED);
     }
 }

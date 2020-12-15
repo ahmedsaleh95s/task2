@@ -122,4 +122,9 @@ class UserService
     {
         $this->userRepo->update($data, $user);
     }
+
+    public function fcm($data)
+    {
+        $this->userRepo->fcm($data);
+    }
 }

@@ -7,6 +7,7 @@ use App\Interfaces\AuthInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\Admin;
+use App\Notifications\FcmNotification;
 
 class UserRepositories implements AuthInterface
 {
@@ -79,5 +80,40 @@ class UserRepositories implements AuthInterface
     public function update($data, $user)
     {
         $user->update($data);
+    }
+
+    public function fcm($data)
+    {
+        auth()->user()->fcms()->create($data);
+    }
+
+    public function allNotifications()
+    {
+        auth()->user()->notifications;
+    }
+
+    public function sendNotification($data)
+    {
+        auth()->user()->notify(new FcmNotification());
+    }
+
+    public function setAsRead($id)
+    {
+        auth()->user()->notifications()->find($id)->markAsRead();
+    }
+
+    public function setAllAsRead()
+    {
+        auth()->user()->notifications->each->markAsRead();
+    }
+
+    public function destroyNotification($id)
+    {
+        auth()->user()->notifications()->find($id)->delete();
+    }
+
+    public function deleteNotifications()
+    {
+        auth()->user()->notifications()->delete();
     }
 }

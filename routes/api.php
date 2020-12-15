@@ -13,27 +13,31 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('reset-password', 'UserController@resetPassword')->name('reset-password');
 
 
-    // Route::middleware('auth:api')->group(function ()
-    // {
-        Route::prefix('users')->group(function (){
+    Route::middleware('auth:api')->group(function () {
+        Route::prefix('users')->group(function () {
+            Route::resource('notifications', 'NotificationController');
+            Route::get('/mark-all-as-read', 'NotificationController@setAllAsRead')->name('setAllAsRead');
+            Route::prefix('notifications')->group(function () {
+                Route::get('/mark-as-read/{id}', 'NotificationController@setAsRead')->name('setAsRead');
+                Route::delete('/', 'NotificationController@delete')->name('delete-all');
+            });
+            Route::post('/fcm', 'UserController@fcm')->name('fcm-token');
             Route::post('/reservation/{serviceProvider}', 'UserController@reservation')->name('user-reservation');
         });
-        Route::prefix('service-provider')->group(function (){
+        Route::prefix('service-provider')->group(function () {
             Route::get('/distance', 'ServiceProviderController@distance')->name('user-distance');
         });
-    // });
+    });
 
-    Route::middleware('auth:admin')->group(function ()
-    {
-        Route::prefix('admin')->group(function (){
+    Route::middleware('auth:admin')->group(function () {
+        Route::prefix('admin')->group(function () {
             Route::post('fcm', 'AdminController@fcm')->name('admin-fcm');
         });
         Route::resource('users', 'UserController');
         Route::resource('service-providers', 'ServiceProviderController');
-        
-        Route::prefix('admin')->group(function (){
-            Route::post('commission', 'AdminController@commission')->name('admin-commission');            
+
+        Route::prefix('admin')->group(function () {
+            Route::post('commission', 'AdminController@commission')->name('admin-commission');
         });
     });
-
 });
