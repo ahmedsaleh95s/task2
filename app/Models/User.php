@@ -53,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->morphMany(FcmToken::class, 'tokenable');
     }
+
+    public function routeNotificationForFcm()
+    {
+        return $this->fcms()->pluck('fcm_token')->toArray();
+    }
 }
