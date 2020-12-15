@@ -89,7 +89,7 @@ class UserRepositories implements AuthInterface
 
     public function allNotifications()
     {
-        auth()->user()->notifications;
+        return auth()->user()->notifications;
     }
 
     public function sendNotification($data)
@@ -100,6 +100,11 @@ class UserRepositories implements AuthInterface
     public function setAsRead($id)
     {
         auth()->user()->notifications()->find($id)->markAsRead();
+    }
+
+    public function showNotification($id)
+    {
+        return auth()->user()->notifications()->find($id);
     }
 
     public function setAllAsRead()

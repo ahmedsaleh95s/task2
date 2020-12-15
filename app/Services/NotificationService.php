@@ -16,7 +16,7 @@ class NotificationService
 
     public function all()
     {
-        $this->userRepo->allNotifications();
+        return $this->userRepo->allNotifications();
     }
 
     public function store($data)
@@ -27,6 +27,11 @@ class NotificationService
     public function setAsRead($id)
     {
         $this->userRepo->setAsRead($id);
+    }
+
+    public function show($id)
+    {
+        return $this->userRepo->showNotification($id);
     }
 
     public function setAllAsRead()

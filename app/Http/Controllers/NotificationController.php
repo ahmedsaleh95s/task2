@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreNotificationRequest;
+use App\Http\Resources\NotificationResource;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class NotificationController extends Controller
     public function index()
     {
         $notifications = $this->notificationService->all();
-        return $notifications; // resource
+        return  NotificationResource::collection($notifications); // resource
     }
 
     public function store(StoreNotificationRequest $request)
@@ -30,10 +31,10 @@ class NotificationController extends Controller
         ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function show()
+    public function show($id)
     {
-        $notifications = $this->notificationService->all();
-        return $notifications; // resource
+        $notifications = $this->notificationService->show($id);
+        return new NotificationResource($notifications);
     }
 
     public function setAsRead($id)
