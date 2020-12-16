@@ -25,6 +25,7 @@ class StoreNotificationRequest extends FormRequest
     {
         return [
             //
+            'message' => 'required'
         ];
     }
 }

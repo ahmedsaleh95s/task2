@@ -21,7 +21,7 @@ class NotificationService
 
     public function store($data)
     {
-        $this->userRepo->sendNotification($data);
+        $this->userRepo->sendNotification($data['message']);
     }
 
     public function setAsRead($id)

@@ -92,9 +92,9 @@ class UserRepositories implements AuthInterface
         return auth()->user()->notifications;
     }
 
-    public function sendNotification($data)
+    public function sendNotification($message)
     {
-        auth()->user()->notify(new FcmNotification("Notification Sent Successfully"));
+        auth()->user()->notify(new FcmNotification($message));
     }
 
     public function setAsRead($id)
