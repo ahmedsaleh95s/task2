@@ -35,6 +35,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
         });
         Route::resource('users', 'UserController');
         Route::resource('service-providers', 'ServiceProviderController');
+        Route::get('search', 'ServiceProviderController@search');
 
         Route::prefix('admin')->group(function () {
             Route::post('commission', 'AdminController@commission')->name('admin-commission');

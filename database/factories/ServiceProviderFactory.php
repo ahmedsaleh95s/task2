@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 
 class ServiceProviderFactory extends Factory
 {

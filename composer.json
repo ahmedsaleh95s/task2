@@ -9,22 +9,21 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "algolia/algoliasearch-client-php": "^2.2",
         "bensampo/laravel-enum": "^3.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "grimzy/laravel-mysql-spatial": "4.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "jenssegers/mongodb": "^3.8",
         "kreait/laravel-firebase": "^3.0",
         "laravel-notification-channels/fcm": "~2.0",
         "laravel/framework": "^8.12",
         "laravel/passport": "^10.0",
+        "laravel/scout": "^8.5",
         "laravel/telescope": "^4.3",
         "laravel/tinker": "^2.5",
         "spatie/laravel-image-optimizer": "^1.6",
-        "spatie/laravel-permission": "^3.18",
-        "yajra/laravel-datatables": "^1.5",
-        "yajra/laravel-datatables-oracle": "^9.14"
+        "spatie/laravel-permission": "^3.18"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

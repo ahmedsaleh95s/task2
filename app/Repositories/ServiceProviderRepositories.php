@@ -5,6 +5,10 @@ namespace App\Repositories;
 use App\Interfaces\AuthInterface;
 use App\Models\ServiceProvider;
 use App\Enums\ProviderType;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
+use Grimzy\LaravelMysqlSpatial\Types\Polygon;
+use Grimzy\LaravelMysqlSpatial\Types\LineString;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class ServiceProviderRepositories implements AuthInterface
 {
@@ -35,20 +39,24 @@ class ServiceProviderRepositories implements AuthInterface
 
     public function handlePlaces($data)
     {
-        $data['location'] = ['type' => "Point", 'coordinates' => [$data['long'], $data['lat']]];
+        $data['location'] = new Point($data['lat'], $data['long']);
         foreach ($data['Area_polygon'] as $point) {
-            $points[] = [$point[1], $point[0]];
+            $points[] = new Point($point[0], $point[1]);
         }
-        $data['area'] = [
-            'type' => "Polygon",
-            'coordinates' =>  [$points]
-        ];
+        $data['area'] = new Polygon([new LineString($points)]);
         return $data;
     }
 
     public function all()
     {
-        return $this->serviceProvider->all();
+        
+        return $this->serviceProvider->paginate();
+    }
+
+    public function search($data)
+    {
+        
+        return $this->serviceProvider->search($data['search'])->paginate();
     }
 
     public function show($id)
@@ -85,14 +93,11 @@ class ServiceProviderRepositories implements AuthInterface
 
     public function distance($data)
     {
+        $geometry = new Point($data['lat'], $data['long']);
         return $this->serviceProvider
-            ->where('area', 'geoIntersects', [
-                '$geometry' => [
-                    'type' => 'Point',
-                    'coordinates' => 
-                        [(double)$data['long'], (double)$data['lat']],
-                ],
-            ])->get();
+        ->contains('area', $geometry)
+        ->orderByDistance('area',$geometry)
+        ->get();
     }
 
     public function workingHoursByColumn($serviceProvider, $column, $value)

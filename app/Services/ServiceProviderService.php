@@ -63,6 +63,11 @@ class ServiceProviderService
         return $this->serviceProviderRepo->all();
     }
 
+    public function search($data)
+    {
+        return $this->serviceProviderRepo->search($data);
+    }
+
     public function show($id)
     {
         return $this->serviceProviderRepo->show($id);

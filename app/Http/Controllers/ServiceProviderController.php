@@ -18,10 +18,11 @@ use App\Http\Resources\TokenResource;
 use App\Services\AuthService;
 use App\Models\ServiceProvider;
 use App\Interfaces\AuthInterface;
-use Yajra\Datatables\Datatables;
+// use Yajra\Datatables\Datatables;
 use App\Http\Requests\GetServiceProviderRequest;
+use App\Http\Requests\ServiceProviderFilterRequest;
 use CategoryServiceProviderTable;
-use Yajra\DataTables\CollectionDataTable;
+// use Yajra\DataTables\CollectionDataTable;
 
 class ServiceProviderController extends Controller
 {
@@ -48,6 +49,11 @@ class ServiceProviderController extends Controller
         return $this->serviceProviderService->all();
     }
 
+    public function search(ServiceProviderFilterRequest $request)
+    {
+        return $this->serviceProviderService->search($request->all());
+    }
+
     public function show(ServiceProvider $serviceProvider)
     {
         return new ServiceProviderResource($serviceProvider);
@@ -57,11 +63,11 @@ class ServiceProviderController extends Controller
     {
         if (request()->ajax()) {
             $collection = $serviceProvider->getIntervals();
-            return DataTables::of($collection)
-                ->addColumn('action', function () use ($serviceProvider) {
-                    return '<button type="submit" id="' . $serviceProvider->id . '" style="margin-top: 1%;" class="btn btn-info col-12">RESERVE</button>';
-                })
-                ->toJson();
+            // return DataTables::of($collection)
+            //     ->addColumn('action', function () use ($serviceProvider) {
+            //         return '<button type="submit" id="' . $serviceProvider->id . '" style="margin-top: 1%;" class="btn btn-info col-12">RESERVE</button>';
+            //     })
+            //     ->toJson();
         }
         return $dataTable->render('service-providers.details');
     }
@@ -87,6 +93,6 @@ class ServiceProviderController extends Controller
     public function distance(GetServiceProviderRequest $request)
     {
         return $serviceProviders = $this->serviceProviderService->distance($request->all());
-        return DataTables::of(ServiceProviderResource::collection($serviceProviders))->toJson();
+        // return DataTables::of(ServiceProviderResource::collection($serviceProviders))->toJson();
     }
 }
